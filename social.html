@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Social Setting · BreakCards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #0A0600;
+      --bg2:        #140D00;
+      --accent:     #E8A030;
+      --accent-dim: rgba(232,160,48,0.12);
+      --accent-mid: rgba(232,160,48,0.4);
+      --text:       #FFF5E8;
+      --dim:        rgba(255,245,232,0.45);
+      --card-bg:    rgba(28,18,0,0.85);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      padding-bottom: 60px;
+    }
+
+    /* ── Hero ─────────────────────────────────── */
+    .hero {
+      width: 100%;
+      position: relative;
+      background: var(--bg);
+    }
+
+    .hero-svg { display: block; width: 100%; }
+
+    .hero-text {
+      padding: 20px 28px 32px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .hero-sub {
+      font-size: 12px;
+      color: var(--dim);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    /* ── Divider ──────────────────────────────── */
+    .divider {
+      width: calc(100% - 56px);
+      margin: 0 28px;
+      height: 1px;
+      background: rgba(232,160,48,0.18);
+    }
+
+    /* ── Sections ─────────────────────────────── */
+    .section {
+      padding: 32px 28px 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    /* ── Reasons ─────────────────────────────── */
+    .reason-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .reason-card {
+      background: var(--accent-dim);
+      border: 1px solid rgba(232,160,48,0.2);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .reason-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      flex-shrink: 0;
+      opacity: 0.55;
+    }
+
+    .reason-text {
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--text);
+      padding-top: 4px;
+    }
+
+    .reason-empty {
+      font-size: 14px;
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    /* ── Quote ───────────────────────────────── */
+    .quote-wrap {
+      padding: 28px;
+      text-align: center;
+    }
+
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 64px;
+      color: var(--accent);
+      opacity: 0.3;
+      line-height: 0.5;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    /* ── Limit card ──────────────────────────── */
+    .limit-card {
+      margin: 0 28px;
+      background: var(--bg2);
+      border: 1.5px solid rgba(232,160,48,0.3);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .limit-label {
+      font-size: 12px;
+      color: var(--dim);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .limit-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 96px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .limit-unit {
+      font-size: 15px;
+      color: var(--dim);
+      margin-bottom: 16px;
+    }
+
+    .limit-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: rgba(232,160,48,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .limit-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 1s ease;
+    }
+
+    .limit-context {
+      font-size: 13px;
+      color: var(--dim);
+      line-height: 1.55;
+    }
+
+    .limit-context strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ── Commit section ──────────────────────── */
+    .commit-section {
+      padding: 28px 28px 0;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 18px 24px;
+      background: var(--accent);
+      color: #0A0600;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-share {
+      width: 100%;
+      padding: 17px 24px;
+      background: transparent;
+      border: 1.5px solid rgba(232,160,48,0.4);
+      color: var(--text);
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .btn-share:active { border-color: var(--accent); }
+
+    /* ── Committed state ─────────────────────── */
+    .committed-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 24px;
+      background: rgba(232,160,48,0.1);
+      border: 1.5px solid rgba(232,160,48,0.35);
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .committed-box.visible { display: flex; }
+
+    .committed-check {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      background: rgba(232,160,48,0.12);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .committed-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .committed-sub {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.55;
+    }
+
+    /* ── Toast ───────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(28,18,0,0.96);
+      border: 1px solid rgba(232,160,48,0.4);
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-size: 14px;
+      color: var(--text);
+      white-space: nowrap;
+      transition: transform 0.35s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Breathing animation ─────────────────── */
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.05); }
+    }
+    .breathe { animation: breathe 5s ease-in-out infinite; transform-origin: 180px 200px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════ HERO ══════════════════════════ -->
+<div class="hero">
+  <svg class="hero-svg" viewBox="0 0 360 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="360" height="270" fill="#0A0600"/>
+
+    <!-- Horizontal divider at circle center -->
+    <line x1="0" y1="200" x2="360" y2="200" stroke="rgba(232,160,48,0.12)" stroke-width="1"/>
+
+    <!-- Vertical spine -->
+    <line x1="180" y1="0" x2="180" y2="148" stroke="rgba(232,160,48,0.2)" stroke-width="1"/>
+
+    <!-- Diagonal radial lines from center -->
+    <line x1="180" y1="200" x2="280" y2="0"   stroke="rgba(232,160,48,0.14)" stroke-width="1"/>
+    <line x1="180" y1="200" x2="80"  y2="0"   stroke="rgba(232,160,48,0.14)" stroke-width="1"/>
+    <line x1="180" y1="200" x2="355" y2="72"  stroke="rgba(232,160,48,0.09)" stroke-width="1"/>
+    <line x1="180" y1="200" x2="5"   y2="72"  stroke="rgba(232,160,48,0.09)" stroke-width="1"/>
+    <line x1="180" y1="200" x2="360" y2="145" stroke="rgba(232,160,48,0.07)" stroke-width="1"/>
+    <line x1="180" y1="200" x2="0"   y2="145" stroke="rgba(232,160,48,0.07)" stroke-width="1"/>
+
+    <!-- Diamond motif above circle (replaces chevron) -->
+    <polygon points="180,96 204,120 180,144 156,120"
+             fill="rgba(232,160,48,0.08)"
+             stroke="rgba(232,160,48,0.6)" stroke-width="1.8"
+             stroke-linejoin="round"/>
+    <!-- Inner diamond -->
+    <polygon points="180,110 194,120 180,130 166,120"
+             fill="rgba(232,160,48,0.22)"
+             stroke="none"/>
+
+    <!-- Concentric circles with breathe -->
+    <g class="breathe">
+      <circle cx="180" cy="200" r="70" fill="rgba(24,14,0,0.95)"/>
+      <circle cx="180" cy="200" r="50" fill="rgba(48,28,0,0.9)"/>
+      <circle cx="180" cy="200" r="30" fill="#E8A030" opacity="0.85"/>
+      <circle cx="180" cy="200" r="13" fill="#FFD080"/>
+    </g>
+    <circle cx="180" cy="200" r="70" fill="none" stroke="rgba(232,160,48,0.1)" stroke-width="1"/>
+  </svg>
+
+  <div class="hero-text">
+    <p class="eyebrow">before you go out</p>
+    <h1 class="hero-title">Social Setting</h1>
+    <p class="hero-sub">pause · reflect · commit</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════ REASONS ══════════════════════════ -->
+<div class="section">
+  <p class="section-label">Why you're doing this</p>
+  <div class="reason-list" id="reasons-list">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- ══════════════════════════ QUOTE ══════════════════════════ -->
+<div class="quote-wrap">
+  <span class="quote-mark">"</span>
+  <p class="quote-text" id="quote-text"></p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════ LIMIT ══════════════════════════ -->
+<div class="section" style="padding-bottom:20px">
+  <p class="section-label">Tonight's commitment</p>
+</div>
+
+<div class="limit-card">
+  <p class="limit-label">Recommended limit</p>
+  <div class="limit-num" id="limit-num">—</div>
+  <p class="limit-unit">cigarettes tonight</p>
+  <div class="limit-bar-wrap">
+    <div class="limit-bar" id="limit-bar" style="width:0%"></div>
+  </div>
+  <p class="limit-context" id="limit-context"></p>
+</div>
+
+<!-- ══════════════════════════ COMMIT ══════════════════════════ -->
+<div class="commit-section">
+  <!-- Committed state (shown after tapping commit) -->
+  <div class="committed-box" id="committed-box">
+    <div class="committed-check">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M4 12l5 5 11-11" stroke="#E8A030" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <p class="committed-title">Committed.</p>
+    <p class="committed-sub" id="committed-sub"></p>
+  </div>
+
+  <button class="btn-primary" id="btn-commit" onclick="commit()">
+    I commit to this goal
+  </button>
+
+  <button class="btn-share" id="btn-share" onclick="shareToTelegram()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Tell your group
+  </button>
+</div>
+
+<!-- ══════════════════════════ TOAST ══════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════ SCRIPT ══════════════════════════ -->
+<script>
+// ────────────────────────────────────────────────────────────
+//  Storage helpers
+// ────────────────────────────────────────────────────────────
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem('bc_profile') || 'null'); } catch(e) { return null; }
+}
+function getLogs() {
+  try { return JSON.parse(localStorage.getItem('bc_logs') || '[]'); } catch(e) { return []; }
+}
+function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// ────────────────────────────────────────────────────────────
+//  Quotes
+// ────────────────────────────────────────────────────────────
+const QUOTES = [
+  "You don't need a cigarette to belong in a room.",
+  "The strongest person at the bar is the one who doesn't need one.",
+  "Your health is worth more than any social moment.",
+  "You can still have a great night — just on your own terms.",
+  "Every time you say no out here, you say yes to yourself.",
+  "The craving will pass. The pride of resisting won't.",
+  "You've already decided who you want to be. Act like it.",
+  "One night at a time. Tonight, you're in control.",
+  "Your reasons are bigger than this moment.",
+  "The best version of you doesn't need it."
+];
+
+// ────────────────────────────────────────────────────────────
+//  Limit calculation
+// ────────────────────────────────────────────────────────────
+function calcLimit() {
+  const profile = getProfile();
+  const logs    = getLogs();
+  const baseline = profile?.sticksPerDay || 10;
+
+  // Get average from last 7 logged days
+  const last7dates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - i - 1);
+    return d.toISOString().slice(0, 10);
+  });
+  const logsLast7 = last7dates.map(d => logs.find(l => l.date === d)).filter(Boolean);
+
+  let avg, source;
+  if (logsLast7.length >= 2) {
+    avg = logsLast7.reduce((s, l) => s + (l.sticks || 0), 0) / logsLast7.length;
+    source = `Based on your last ${logsLast7.length} days avg of <strong>${avg.toFixed(1)}</strong>`;
+  } else {
+    // Use tomorrowTarget from latest log, or profile baseline
+    const lastLog = logs[logs.length - 1];
+    avg = lastLog?.tomorrowTarget || baseline;
+    source = `Based on your daily target of <strong>${avg}</strong>`;
+  }
+
+  // Suggest ~40% of daily average, rounded up, minimum 1
+  const limit = Math.max(1, Math.ceil(avg * 0.4));
+  // Progress bar: limit vs baseline
+  const pct = Math.min(100, Math.round((limit / baseline) * 100));
+
+  return { limit, avg, source, pct };
+}
+
+// ────────────────────────────────────────────────────────────
+//  Commit
+// ────────────────────────────────────────────────────────────
+let isCommitted = false;
+let limit = 0;
+
+function commit() {
+  if (isCommitted) return;
+  isCommitted = true;
+
+  document.getElementById('btn-commit').style.display = 'none';
+  const box = document.getElementById('committed-box');
+  box.classList.add('visible');
+
+  const profile = getProfile();
+  const name = profile?.name ? `, ${profile.name}` : '';
+  document.getElementById('committed-sub').textContent =
+    `Max ${limit} tonight${name}. You've got this.`;
+
+  showToast('Commitment saved ✓');
+}
+
+// ────────────────────────────────────────────────────────────
+//  Share to Telegram
+//
+//  ⚠️  PENDING SETUP — not yet wired.
+//  Before enabling: confirm bot token + channel ID with user.
+//  See comment block below for implementation plan.
+// ────────────────────────────────────────────────────────────
+function shareToTelegram() {
+  const profile = getProfile();
+  const name    = profile?.name || 'A friend';
+
+  const message = buildShareMessage(profile, name);
+
+  /* ── TELEGRAM BOT API (automatic send) ──────────────────────
+   *
+   *  When ready, replace the showToast below with:
+   *
+   *  const TOKEN    = 'YOUR_BOT_TOKEN';       // from @BotFather
+   *  const CHAT_ID  = '@yourchannel';         // channel username or numeric ID
+   *
+   *  fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+   *    method:  'POST',
+   *    headers: { 'Content-Type': 'application/json' },
+   *    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' })
+   *  })
+   *  .then(r => r.json())
+   *  .then(d => {
+   *    if (d.ok) showToast('Sent to your group ✓');
+   *    else      showToast('Could not send. Check bot setup.');
+   *  })
+   *  .catch(() => showToast('No connection.'));
+   *
+   * ─────────────────────────────────────────────────────────── */
+
+  // Temporary: open Telegram with pre-filled message (works without bot)
+  const encodedMsg = encodeURIComponent(message);
+  window.open(`https://t.me/share/url?text=${encodedMsg}`, '_blank');
+}
+
+function buildShareMessage(profile, name) {
+  const reasons = (profile?.reasons || []).filter(Boolean);
+  const reasonLines = reasons.length
+    ? reasons.map(r => `  • ${r}`).join('\n')
+    : '  • Living healthier';
+
+  return [
+    `🚭 <b>${name}'s commitment tonight</b>`,
+    ``,
+    `Heading out, but staying in control.`,
+    `Tonight's limit: <b>${limit} cigarette${limit !== 1 ? 's' : ''}</b>`,
+    ``,
+    `Why I'm doing this:`,
+    reasonLines,
+    ``,
+    `Holding myself accountable. 💪`
+  ].join('\n');
+}
+
+// ────────────────────────────────────────────────────────────
+//  Toast
+// ────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ────────────────────────────────────────────────────────────
+//  Init
+// ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  const profile = getProfile();
+
+  // ── Reasons ──
+  const reasons = (profile?.reasons || []).filter(Boolean);
+  const list = document.getElementById('reasons-list');
+  if (reasons.length) {
+    reasons.forEach((r, i) => {
+      list.innerHTML += `
+        <div class="reason-card">
+          <span class="reason-num">${i + 1}</span>
+          <span class="reason-text">${r}</span>
+        </div>`;
+    });
+  } else {
+    list.innerHTML = `<p class="reason-empty">
+      Complete onboarding at <a href="/home" style="color:var(--accent)">your home page</a> to see your reasons here.
+    </p>`;
+  }
+
+  // ── Quote ──
+  document.getElementById('quote-text').textContent =
+    QUOTES[Math.floor(Math.random() * QUOTES.length)];
+
+  // ── Limit ──
+  const { limit: l, source, pct } = calcLimit();
+  limit = l;
+  document.getElementById('limit-num').textContent = limit;
+  document.getElementById('limit-context').innerHTML = source +
+    ` — that's <strong>${pct}%</strong> of your daily average, a realistic goal for a night out.`;
+
+  // Animate bar after a short delay
+  setTimeout(() => {
+    document.getElementById('limit-bar').style.width = pct + '%';
+  }, 300);
+});
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@
     { "source": "/sad",       "destination": "/sad.html" },
     { "source": "/home",      "destination": "/home.html" },
     { "source": "/daily",     "destination": "/daily.html" },
+    { "source": "/social",    "destination": "/social.html" },
     { "source": "/",          "destination": "/index.html" }
   ]
 }
