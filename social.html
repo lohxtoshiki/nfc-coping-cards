@@ -9,22 +9,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:         #0A0600;
-      --bg2:        #140D00;
-      --accent:     #E8A030;
-      --accent-dim: rgba(232,160,48,0.12);
-      --accent-mid: rgba(232,160,48,0.4);
-      --text:       #FFF5E8;
-      --dim:        rgba(255,245,232,0.45);
-      --card-bg:    rgba(28,18,0,0.85);
+      --bg:         #1E0828;
+      --bg2:        #280A36;
+      --accent:     #D93585;
+      --accent-dim: rgba(217,53,133,0.12);
+      --accent-mid: rgba(217,53,133,0.4);
+      --text:       #FFE4F2;
+      --dim:        rgba(255,228,242,0.45);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      background: var(--bg);
-      scroll-behavior: smooth;
-    }
+    html { background: var(--bg); scroll-behavior: smooth; }
 
     body {
       min-height: 100vh;
@@ -35,19 +31,13 @@
     }
 
     /* ── Hero ─────────────────────────────────── */
-    .hero {
-      width: 100%;
-      position: relative;
-      background: var(--bg);
-    }
-
+    .hero { width: 100%; }
     .hero-svg { display: block; width: 100%; }
 
     .hero-text {
-      padding: 20px 28px 32px;
+      padding: 16px 28px 28px;
       text-align: center;
     }
-
     .eyebrow {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
@@ -56,7 +46,6 @@
       letter-spacing: 0.08em;
       margin-bottom: 4px;
     }
-
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 700;
@@ -64,7 +53,6 @@
       line-height: 1;
       margin-bottom: 8px;
     }
-
     .hero-sub {
       font-size: 12px;
       color: var(--dim);
@@ -77,13 +65,11 @@
       width: calc(100% - 56px);
       margin: 0 28px;
       height: 1px;
-      background: rgba(232,160,48,0.18);
+      background: rgba(217,53,133,0.18);
     }
 
     /* ── Sections ─────────────────────────────── */
-    .section {
-      padding: 32px 28px 0;
-    }
+    .section { padding: 32px 28px 0; }
 
     .section-label {
       font-size: 11px;
@@ -94,22 +80,17 @@
     }
 
     /* ── Reasons ─────────────────────────────── */
-    .reason-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .reason-list { display: flex; flex-direction: column; gap: 12px; }
 
     .reason-card {
       background: var(--accent-dim);
-      border: 1px solid rgba(232,160,48,0.2);
+      border: 1px solid rgba(217,53,133,0.22);
       border-radius: 14px;
       padding: 16px 18px;
       display: flex;
       align-items: flex-start;
       gap: 14px;
     }
-
     .reason-num {
       font-family: 'Cormorant Garamond', serif;
       font-size: 28px;
@@ -117,28 +98,18 @@
       color: var(--accent);
       line-height: 1;
       flex-shrink: 0;
-      opacity: 0.55;
+      opacity: 0.5;
     }
-
     .reason-text {
       font-size: 16px;
       line-height: 1.5;
       color: var(--text);
       padding-top: 4px;
     }
-
-    .reason-empty {
-      font-size: 14px;
-      color: var(--dim);
-      font-style: italic;
-    }
+    .reason-empty { font-size: 14px; color: var(--dim); font-style: italic; }
 
     /* ── Quote ───────────────────────────────── */
-    .quote-wrap {
-      padding: 28px;
-      text-align: center;
-    }
-
+    .quote-wrap { padding: 28px; text-align: center; }
     .quote-mark {
       font-family: 'Cormorant Garamond', serif;
       font-size: 64px;
@@ -148,7 +119,6 @@
       display: block;
       margin-bottom: 8px;
     }
-
     .quote-text {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
@@ -161,12 +131,11 @@
     .limit-card {
       margin: 0 28px;
       background: var(--bg2);
-      border: 1.5px solid rgba(232,160,48,0.3);
+      border: 1.5px solid rgba(217,53,133,0.3);
       border-radius: 20px;
       padding: 28px 24px;
       text-align: center;
     }
-
     .limit-label {
       font-size: 12px;
       color: var(--dim);
@@ -174,7 +143,6 @@
       text-transform: uppercase;
       margin-bottom: 8px;
     }
-
     .limit-num {
       font-family: 'Cormorant Garamond', serif;
       font-size: 96px;
@@ -183,50 +151,28 @@
       line-height: 1;
       margin-bottom: 4px;
     }
-
-    .limit-unit {
-      font-size: 15px;
-      color: var(--dim);
-      margin-bottom: 16px;
-    }
-
+    .limit-unit { font-size: 15px; color: var(--dim); margin-bottom: 16px; }
     .limit-bar-wrap {
-      width: 100%;
-      height: 4px;
-      background: rgba(232,160,48,0.15);
-      border-radius: 2px;
-      overflow: hidden;
+      width: 100%; height: 4px;
+      background: rgba(217,53,133,0.15);
+      border-radius: 2px; overflow: hidden;
       margin-bottom: 14px;
     }
-
     .limit-bar {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: width 1s ease;
+      height: 100%; background: var(--accent);
+      border-radius: 2px; transition: width 1s ease;
     }
-
-    .limit-context {
-      font-size: 13px;
-      color: var(--dim);
-      line-height: 1.55;
-    }
-
-    .limit-context strong {
-      color: var(--accent);
-      font-weight: 500;
-    }
+    .limit-context { font-size: 13px; color: var(--dim); line-height: 1.55; }
+    .limit-context strong { color: var(--accent); font-weight: 500; }
 
     /* ── Commit section ──────────────────────── */
-    .commit-section {
-      padding: 28px 28px 0;
-    }
+    .commit-section { padding: 28px 28px 0; }
 
     .btn-primary {
       width: 100%;
       padding: 18px 24px;
       background: var(--accent);
-      color: #0A0600;
+      color: #1E0828;
       border: none;
       border-radius: 14px;
       font-family: 'DM Sans', sans-serif;
@@ -238,14 +184,13 @@
       letter-spacing: 0.02em;
       margin-bottom: 12px;
     }
-
     .btn-primary:active { transform: scale(0.98); }
 
     .btn-share {
       width: 100%;
       padding: 17px 24px;
       background: transparent;
-      border: 1.5px solid rgba(232,160,48,0.4);
+      border: 1.5px solid rgba(217,53,133,0.4);
       color: var(--text);
       border-radius: 14px;
       font-family: 'DM Sans', sans-serif;
@@ -256,10 +201,10 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, color 0.2s;
     }
-
-    .btn-share:active { border-color: var(--accent); }
+    .btn-share:active  { border-color: var(--accent); }
+    .btn-share:disabled { opacity: 0.5; cursor: default; }
 
     /* ── Committed state ─────────────────────── */
     .committed-box {
@@ -268,35 +213,27 @@
       align-items: center;
       gap: 10px;
       padding: 24px;
-      background: rgba(232,160,48,0.1);
-      border: 1.5px solid rgba(232,160,48,0.35);
+      background: rgba(217,53,133,0.1);
+      border: 1.5px solid rgba(217,53,133,0.35);
       border-radius: 20px;
       text-align: center;
       margin-bottom: 12px;
     }
-
     .committed-box.visible { display: flex; }
-
     .committed-check {
       width: 52px; height: 52px;
       border-radius: 50%;
       border: 1.5px solid var(--accent);
-      background: rgba(232,160,48,0.12);
+      background: rgba(217,53,133,0.12);
       display: flex; align-items: center; justify-content: center;
     }
-
     .committed-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: 32px;
       font-weight: 700;
       color: var(--accent);
     }
-
-    .committed-sub {
-      font-size: 14px;
-      color: var(--dim);
-      line-height: 1.55;
-    }
+    .committed-sub { font-size: 14px; color: var(--dim); line-height: 1.55; }
 
     /* ── Toast ───────────────────────────────── */
     .toast {
@@ -304,8 +241,8 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: rgba(28,18,0,0.96);
-      border: 1px solid rgba(232,160,48,0.4);
+      background: rgba(30,8,40,0.97);
+      border: 1px solid rgba(217,53,133,0.4);
       border-radius: 14px;
       padding: 14px 22px;
       font-size: 14px;
@@ -315,62 +252,75 @@
       z-index: 100;
       pointer-events: none;
     }
-
     .toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ── Breathing animation ─────────────────── */
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50%       { transform: scale(1.05); }
-    }
-    .breathe { animation: breathe 5s ease-in-out infinite; transform-origin: 180px 200px; }
   </style>
 </head>
 <body>
 
 <!-- ══════════════════════════ HERO ══════════════════════════ -->
 <div class="hero">
-  <svg class="hero-svg" viewBox="0 0 360 270" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="360" height="270" fill="#0A0600"/>
+  <svg class="hero-svg" viewBox="0 0 360 315" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="360" height="315" fill="#1E0828"/>
 
-    <!-- Horizontal divider at circle center -->
-    <line x1="0" y1="200" x2="360" y2="200" stroke="rgba(232,160,48,0.12)" stroke-width="1"/>
+    <!-- ── Dots — row 1 (upper, smaller) ── -->
+    <circle cx="28"  cy="72"  r="5"   fill="none" stroke="rgba(217,53,133,0.32)" stroke-width="1.2"/>
+    <circle cx="70"  cy="61"  r="6"   fill="none" stroke="rgba(217,53,133,0.38)" stroke-width="1.2"/>
+    <circle cx="116" cy="54"  r="7"   fill="none" stroke="rgba(217,53,133,0.44)" stroke-width="1.2"/>
+    <circle cx="164" cy="51"  r="7.5" fill="none" stroke="rgba(217,53,133,0.48)" stroke-width="1.2"/>
+    <circle cx="212" cy="54"  r="7"   fill="none" stroke="rgba(217,53,133,0.44)" stroke-width="1.2"/>
+    <circle cx="258" cy="61"  r="6"   fill="none" stroke="rgba(217,53,133,0.38)" stroke-width="1.2"/>
+    <circle cx="300" cy="70"  r="5"   fill="none" stroke="rgba(217,53,133,0.32)" stroke-width="1.2"/>
 
-    <!-- Vertical spine -->
-    <line x1="180" y1="0" x2="180" y2="148" stroke="rgba(232,160,48,0.2)" stroke-width="1"/>
+    <!-- ── Dots — row 2 (lower, larger) ── -->
+    <circle cx="12"  cy="112" r="7"   fill="none" stroke="rgba(217,53,133,0.38)" stroke-width="1.2"/>
+    <circle cx="55"  cy="98"  r="9"   fill="none" stroke="rgba(217,53,133,0.44)" stroke-width="1.2"/>
+    <circle cx="106" cy="89"  r="11"  fill="none" stroke="rgba(217,53,133,0.5)"  stroke-width="1.2"/>
+    <circle cx="160" cy="85"  r="13"  fill="none" stroke="rgba(217,53,133,0.56)" stroke-width="1.3"/>
+    <circle cx="213" cy="88"  r="11"  fill="none" stroke="rgba(217,53,133,0.5)"  stroke-width="1.2"/>
+    <circle cx="265" cy="96"  r="9"   fill="none" stroke="rgba(217,53,133,0.44)" stroke-width="1.2"/>
+    <circle cx="314" cy="106" r="7"   fill="none" stroke="rgba(217,53,133,0.38)" stroke-width="1.2"/>
+    <circle cx="347" cy="120" r="5"   fill="none" stroke="rgba(217,53,133,0.3)"  stroke-width="1.2"/>
 
-    <!-- Diagonal radial lines from center -->
-    <line x1="180" y1="200" x2="280" y2="0"   stroke="rgba(232,160,48,0.14)" stroke-width="1"/>
-    <line x1="180" y1="200" x2="80"  y2="0"   stroke="rgba(232,160,48,0.14)" stroke-width="1"/>
-    <line x1="180" y1="200" x2="355" y2="72"  stroke="rgba(232,160,48,0.09)" stroke-width="1"/>
-    <line x1="180" y1="200" x2="5"   y2="72"  stroke="rgba(232,160,48,0.09)" stroke-width="1"/>
-    <line x1="180" y1="200" x2="360" y2="145" stroke="rgba(232,160,48,0.07)" stroke-width="1"/>
-    <line x1="180" y1="200" x2="0"   y2="145" stroke="rgba(232,160,48,0.07)" stroke-width="1"/>
+    <!-- ── Three overlapping Venn circles ── -->
+    <circle cx="136" cy="218" r="90" fill="none" stroke="rgba(217,53,133,0.3)"  stroke-width="1.5"/>
+    <circle cx="224" cy="218" r="90" fill="none" stroke="rgba(217,53,133,0.3)"  stroke-width="1.5"/>
+    <circle cx="180" cy="184" r="90" fill="none" stroke="rgba(217,53,133,0.22)" stroke-width="1.5"/>
 
-    <!-- Diamond motif above circle (replaces chevron) -->
-    <polygon points="180,96 204,120 180,144 156,120"
-             fill="rgba(232,160,48,0.08)"
-             stroke="rgba(232,160,48,0.6)" stroke-width="1.8"
-             stroke-linejoin="round"/>
-    <!-- Inner diamond -->
-    <polygon points="180,110 194,120 180,130 166,120"
-             fill="rgba(232,160,48,0.22)"
-             stroke="none"/>
+    <!-- ── Left chat bubble ── -->
+    <!-- Tail behind rect -->
+    <polygon points="127,222 116,240 150,222"
+             fill="#280A36" stroke="rgba(217,53,133,0.6)" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- Rect on top -->
+    <rect x="104" y="186" width="76" height="37" rx="11"
+          fill="#280A36" stroke="rgba(217,53,133,0.6)" stroke-width="1.2"/>
+    <!-- Cover tail–rect seam -->
+    <rect x="112" y="219" width="55" height="5" fill="#280A36"/>
+    <!-- Typing dots -->
+    <circle cx="122" cy="204.5" r="3.5" fill="rgba(217,53,133,0.5)"/>
+    <circle cx="136" cy="204.5" r="3.5" fill="rgba(217,53,133,0.72)"/>
+    <circle cx="150" cy="204.5" r="3.5" fill="#D93585"/>
 
-    <!-- Concentric circles with breathe -->
-    <g class="breathe">
-      <circle cx="180" cy="200" r="70" fill="rgba(24,14,0,0.95)"/>
-      <circle cx="180" cy="200" r="50" fill="rgba(48,28,0,0.9)"/>
-      <circle cx="180" cy="200" r="30" fill="#E8A030" opacity="0.85"/>
-      <circle cx="180" cy="200" r="13" fill="#FFD080"/>
-    </g>
-    <circle cx="180" cy="200" r="70" fill="none" stroke="rgba(232,160,48,0.1)" stroke-width="1"/>
+    <!-- ── Right chat bubble (larger, overlapping) ── -->
+    <!-- Tail behind rect -->
+    <polygon points="196,212 184,230 212,212"
+             fill="#280A36" stroke="rgba(217,53,133,0.78)" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- Rect on top -->
+    <rect x="172" y="173" width="84" height="40" rx="11"
+          fill="#280A36" stroke="rgba(217,53,133,0.78)" stroke-width="1.2"/>
+    <!-- Cover tail–rect seam -->
+    <rect x="180" y="209" width="60" height="5" fill="#280A36"/>
+    <!-- Dots + forward arrow -->
+    <circle cx="190" cy="193" r="3.5" fill="rgba(217,53,133,0.45)"/>
+    <circle cx="204" cy="193" r="3.5" fill="rgba(217,53,133,0.68)"/>
+    <circle cx="218" cy="193" r="3.5" fill="#D93585"/>
+    <path d="M228 193 l6-4 -6-4" stroke="#D93585" stroke-width="1.6"
+          fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 
   <div class="hero-text">
-    <p class="eyebrow">before you go out</p>
-    <h1 class="hero-title">Social Setting</h1>
-    <p class="hero-sub">pause · reflect · commit</p>
+    <p class="eyebrow">navigating a</p>
+    <h1 class="hero-title">social setting</h1>
+    <p class="hero-sub">people · connection · space</p>
   </div>
 </div>
 
@@ -379,9 +329,7 @@
 <!-- ══════════════════════════ REASONS ══════════════════════════ -->
 <div class="section">
   <p class="section-label">Why you're doing this</p>
-  <div class="reason-list" id="reasons-list">
-    <!-- populated by JS -->
-  </div>
+  <div class="reason-list" id="reasons-list"></div>
 </div>
 
 <!-- ══════════════════════════ QUOTE ══════════════════════════ -->
@@ -409,11 +357,11 @@
 
 <!-- ══════════════════════════ COMMIT ══════════════════════════ -->
 <div class="commit-section">
-  <!-- Committed state (shown after tapping commit) -->
   <div class="committed-box" id="committed-box">
     <div class="committed-check">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M4 12l5 5 11-11" stroke="#E8A030" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 12l5 5 11-11" stroke="#D93585" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
     <p class="committed-title">Committed.</p>
@@ -426,18 +374,24 @@
 
   <button class="btn-share" id="btn-share" onclick="shareToTelegram()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     Tell your group
   </button>
 </div>
 
-<!-- ══════════════════════════ TOAST ══════════════════════════ -->
 <div class="toast" id="toast"></div>
 
-<!-- ══════════════════════════ SCRIPT ══════════════════════════ -->
 <script>
+// ────────────────────────────────────────────────────────────
+//  Telegram config
+// ────────────────────────────────────────────────────────────
+const TG_TOKEN   = '8696784388:AAGgrzcQH7kMCW2c8gBtusfMC6gwJbues4o';
+const TG_CHAT_ID = '@smokingcessationjason';
+
 // ────────────────────────────────────────────────────────────
 //  Storage helpers
 // ────────────────────────────────────────────────────────────
@@ -446,9 +400,6 @@ function getProfile() {
 }
 function getLogs() {
   try { return JSON.parse(localStorage.getItem('bc_logs') || '[]'); } catch(e) { return []; }
-}
-function getToday() {
-  return new Date().toISOString().slice(0, 10);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -471,11 +422,10 @@ const QUOTES = [
 //  Limit calculation
 // ────────────────────────────────────────────────────────────
 function calcLimit() {
-  const profile = getProfile();
-  const logs    = getLogs();
+  const profile  = getProfile();
+  const logs     = getLogs();
   const baseline = profile?.sticksPerDay || 10;
 
-  // Get average from last 7 logged days
   const last7dates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() - i - 1);
     return d.toISOString().slice(0, 10);
@@ -484,92 +434,111 @@ function calcLimit() {
 
   let avg, source;
   if (logsLast7.length >= 2) {
-    avg = logsLast7.reduce((s, l) => s + (l.sticks || 0), 0) / logsLast7.length;
-    source = `Based on your last ${logsLast7.length} days avg of <strong>${avg.toFixed(1)}</strong>`;
+    avg    = logsLast7.reduce((s, l) => s + (l.sticks || 0), 0) / logsLast7.length;
+    source = `Based on your last ${logsLast7.length}-day avg of <strong>${avg.toFixed(1)}</strong>`;
   } else {
-    // Use tomorrowTarget from latest log, or profile baseline
     const lastLog = logs[logs.length - 1];
-    avg = lastLog?.tomorrowTarget || baseline;
+    avg    = lastLog?.tomorrowTarget || baseline;
     source = `Based on your daily target of <strong>${avg}</strong>`;
   }
 
-  // Suggest ~40% of daily average, rounded up, minimum 1
   const limit = Math.max(1, Math.ceil(avg * 0.4));
-  // Progress bar: limit vs baseline
-  const pct = Math.min(100, Math.round((limit / baseline) * 100));
-
+  const pct   = Math.min(100, Math.round((limit / baseline) * 100));
   return { limit, avg, source, pct };
 }
 
 // ────────────────────────────────────────────────────────────
-//  Commit
+//  State
 // ────────────────────────────────────────────────────────────
 let isCommitted = false;
-let limit = 0;
+let limit       = 0;
 
+// ────────────────────────────────────────────────────────────
+//  Commit
+// ────────────────────────────────────────────────────────────
 function commit() {
   if (isCommitted) return;
   isCommitted = true;
 
   document.getElementById('btn-commit').style.display = 'none';
-  const box = document.getElementById('committed-box');
-  box.classList.add('visible');
+  document.getElementById('committed-box').classList.add('visible');
 
   const profile = getProfile();
-  const name = profile?.name ? `, ${profile.name}` : '';
+  const name    = profile?.name ? `, ${profile.name}` : '';
   document.getElementById('committed-sub').textContent =
     `Max ${limit} tonight${name}. You've got this.`;
 
-  showToast('Commitment saved ✓');
+  showToast('Commitment locked in ✓');
 }
 
 // ────────────────────────────────────────────────────────────
-//  Share to Telegram
-//
-//  ⚠️  PENDING SETUP — not yet wired.
-//  Before enabling: confirm bot token + channel ID with user.
-//  See comment block below for implementation plan.
+//  Share to Telegram (automatic send via Bot API)
 // ────────────────────────────────────────────────────────────
-function shareToTelegram() {
+async function shareToTelegram() {
+  const btn     = document.getElementById('btn-share');
   const profile = getProfile();
-  const name    = profile?.name || 'A friend';
-
+  const name    = profile?.name || 'Someone';
   const message = buildShareMessage(profile, name);
 
-  /* ── TELEGRAM BOT API (automatic send) ──────────────────────
-   *
-   *  When ready, replace the showToast below with:
-   *
-   *  const TOKEN    = 'YOUR_BOT_TOKEN';       // from @BotFather
-   *  const CHAT_ID  = '@yourchannel';         // channel username or numeric ID
-   *
-   *  fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-   *    method:  'POST',
-   *    headers: { 'Content-Type': 'application/json' },
-   *    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' })
-   *  })
-   *  .then(r => r.json())
-   *  .then(d => {
-   *    if (d.ok) showToast('Sent to your group ✓');
-   *    else      showToast('Could not send. Check bot setup.');
-   *  })
-   *  .catch(() => showToast('No connection.'));
-   *
-   * ─────────────────────────────────────────────────────────── */
+  btn.disabled     = true;
+  btn.innerHTML    = 'Sending…';
 
-  // Temporary: open Telegram with pre-filled message (works without bot)
-  const encodedMsg = encodeURIComponent(message);
-  window.open(`https://t.me/share/url?text=${encodedMsg}`, '_blank');
+  try {
+    const resp = await fetch(
+      `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
+      {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          chat_id:    TG_CHAT_ID,
+          text:       message,
+          parse_mode: 'HTML'
+        })
+      }
+    );
+    const data = await resp.json();
+
+    if (data.ok) {
+      btn.innerHTML  = '✓ &nbsp;Sent to group';
+      btn.style.borderColor = 'var(--accent)';
+      btn.style.color       = 'var(--accent)';
+      showToast('Posted to your group ✓');
+    } else {
+      btn.disabled  = false;
+      btn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>Tell your group`;
+      showToast('Could not send — ' + (data.description || 'unknown error'));
+    }
+  } catch(e) {
+    btn.disabled  = false;
+    btn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>Tell your group`;
+    showToast('No connection — try again');
+  }
+}
+
+// Escape HTML entities for Telegram HTML parse mode
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function buildShareMessage(profile, name) {
   const reasons = (profile?.reasons || []).filter(Boolean);
   const reasonLines = reasons.length
-    ? reasons.map(r => `  • ${r}`).join('\n')
+    ? reasons.map(r => `  • ${esc(r)}`).join('\n')
     : '  • Living healthier';
 
   return [
-    `🚭 <b>${name}'s commitment tonight</b>`,
+    `🚭 <b>${esc(name)}'s commitment tonight</b>`,
     ``,
     `Heading out, but staying in control.`,
     `Tonight's limit: <b>${limit} cigarette${limit !== 1 ? 's' : ''}</b>`,
@@ -590,7 +559,7 @@ function showToast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
 // ────────────────────────────────────────────────────────────
@@ -599,9 +568,9 @@ function showToast(msg) {
 document.addEventListener('DOMContentLoaded', function () {
   const profile = getProfile();
 
-  // ── Reasons ──
+  // Reasons
   const reasons = (profile?.reasons || []).filter(Boolean);
-  const list = document.getElementById('reasons-list');
+  const list    = document.getElementById('reasons-list');
   if (reasons.length) {
     reasons.forEach((r, i) => {
       list.innerHTML += `
@@ -612,22 +581,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   } else {
     list.innerHTML = `<p class="reason-empty">
-      Complete onboarding at <a href="/home" style="color:var(--accent)">your home page</a> to see your reasons here.
+      Complete onboarding at <a href="/home" style="color:var(--accent)">your home page</a>
+      to see your reasons here.
     </p>`;
   }
 
-  // ── Quote ──
+  // Quote
   document.getElementById('quote-text').textContent =
     QUOTES[Math.floor(Math.random() * QUOTES.length)];
 
-  // ── Limit ──
+  // Limit
   const { limit: l, source, pct } = calcLimit();
   limit = l;
   document.getElementById('limit-num').textContent = limit;
-  document.getElementById('limit-context').innerHTML = source +
-    ` — that's <strong>${pct}%</strong> of your daily average, a realistic goal for a night out.`;
+  document.getElementById('limit-context').innerHTML =
+    source + ` — that's <strong>${pct}%</strong> of your daily average, a realistic goal for tonight.`;
 
-  // Animate bar after a short delay
   setTimeout(() => {
     document.getElementById('limit-bar').style.width = pct + '%';
   }, 300);
