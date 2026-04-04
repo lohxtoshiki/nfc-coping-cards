@@ -1,7 +1,11 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/stressed", "destination": "/stressed.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/stressed",  "destination": "/stressed.html" },
+    { "source": "/anxious",   "destination": "/anxious.html" },
+    { "source": "/angry",     "destination": "/angry.html" },
+    { "source": "/lonely",    "destination": "/lonely.html" },
+    { "source": "/sad",       "destination": "/sad.html" },
+    { "source": "/",          "destination": "/index.html" }
   ]
 }

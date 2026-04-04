@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Feeling Sad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:         #1A1860;
+            --bg-deep:    #100E40;
+            --bg-darkest: #080730;
+            --c1:         #201E78;
+            --c2:         #332FA0;
+            --c3:         #5552C0;
+            --c4:         #7E7CD8;
+            --cdot:       #C8C6F5;
+            --text:       #FFFFFF;
+            --dim:        rgba(255,255,255,0.65);
+            --dimmer:     rgba(255,255,255,0.38);
+            --card:       rgba(255,255,255,0.07);
+            --border:     rgba(255,255,255,0.11);
+            --accent:     #8E8CE8;
+            --accent-glow:rgba(142,140,232,0.35);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        html, body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Radial depth gradient */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 90%, var(--bg-darkest) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 50% at 85% 10%, rgba(60,55,160,0.35) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient rain lines — full page background */
+        .bg-waves {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 420px;
+            margin: 0 auto;
+            padding-bottom: 52px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            padding: 56px 24px 36px;
+            text-align: center;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) both;
+        }
+
+        /* Teardrop / scene wrap */
+        .eye-wrap {
+            position: relative;
+            width: 172px;
+            height: 172px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Scene SVG animation */
+        @keyframes drop {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(5px); }
+        }
+
+        .scene-svg {
+            animation: drop 5s ease-in-out infinite;
+            overflow: visible;
+        }
+
+        .feeling-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 17px;
+            letter-spacing: 0.32em;
+            color: var(--dim);
+            margin-bottom: 6px;
+        }
+
+        .emotion-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 62px;
+            line-height: 1;
+            letter-spacing: -0.015em;
+            margin-bottom: 10px;
+        }
+
+        .emotion-tags {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: var(--dimmer);
+            letter-spacing: 0.12em;
+        }
+
+        /* ─── DIVIDER ─── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 24px 28px;
+        }
+
+        /* ─── SECTION LABEL ─── */
+        .section-label {
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            padding: 0 24px;
+            margin-bottom: 14px;
+        }
+
+        /* ─── ACTIVITY CARDS ─── */
+        .activities {
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.12s both;
+        }
+
+        .activity-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .activity-head {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 18px;
+        }
+
+        .activity-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: rgba(142,140,232,0.18);
+            border: 1px solid rgba(142,140,232,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .activity-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 22px;
+            line-height: 1.15;
+        }
+
+        .activity-sub {
+            font-size: 11.5px;
+            color: var(--dimmer);
+            margin-top: 3px;
+            letter-spacing: 0.02em;
+        }
+
+        .steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .step {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(142,140,232,0.2);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text {
+            font-size: 14.5px;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .step-text strong { color: #fff; font-weight: 500; }
+
+        /* ─── TIMER ─── */
+        .timer-section {
+            padding: 0 24px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.22s both;
+        }
+
+        .timer-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px 20px 26px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .timer-label {
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 22px;
+        }
+
+        .timer-ring-wrap {
+            position: relative;
+            width: 138px;
+            height: 138px;
+            margin: 0 auto 22px;
+        }
+
+        .timer-ring {
+            width: 138px;
+            height: 138px;
+            transform: rotate(-90deg);
+            display: block;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.09);
+            stroke-width: 3.5;
+        }
+
+        .ring-prog {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-dasharray: 390.1; /* 2π×62 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
+        }
+
+        .timer-time {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .timer-subs {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--dimmer);
+            white-space: nowrap;
+        }
+
+        .timer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 30px;
+            border-radius: 100px;
+            border: 1.5px solid rgba(142,140,232,0.45);
+            background: rgba(142,140,232,0.13);
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+            transition: background 0.18s, transform 0.12s;
+        }
+
+        .timer-btn:active {
+            background: rgba(142,140,232,0.28);
+            transform: scale(0.97);
+        }
+
+        /* ─── FEEL BETTER BUTTON ─── */
+        .feel-better-section {
+            padding: 0 24px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.32s both;
+        }
+
+        .feel-better-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            border: none;
+            background: #fff;
+            color: var(--bg-deep);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15.5px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.01em;
+            transition: opacity 0.15s, transform 0.12s;
+        }
+
+        .feel-better-btn:active {
+            transform: scale(0.98);
+            opacity: 0.88;
+        }
+
+        /* ─── SUCCESS OVERLAY ─── */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 32px;
+        }
+
+        .success-overlay.show { display: flex; animation: fadeIn 0.4s ease both; }
+
+        .success-eye {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .check-mark {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 28px;
+            z-index: 1;
+        }
+
+        .success-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 48px;
+            margin-bottom: 14px;
+        }
+
+        .success-sub {
+            font-size: 15.5px;
+            line-height: 1.65;
+            color: var(--dim);
+            max-width: 290px;
+        }
+
+        .success-note {
+            margin-top: 28px;
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dimmer);
+        }
+
+        /* ─── KEYFRAMES ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Background ambient rain lines -->
+<div class="bg-waves">
+    <svg width="100%" height="100%" viewBox="0 0 420 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Rain lines: diagonal, slanting top-right to bottom-left (~70° angle) -->
+        <!-- Each line: dx ≈ -15, dy ≈ 42 (steep vertical slant) -->
+        <line x1="30"  y1="20"  x2="16"  y2="62"  stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="60"  y1="5"   x2="46"  y2="47"  stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+        <line x1="95"  y1="30"  x2="81"  y2="72"  stroke="rgba(120,118,200,0.15)" stroke-width="1"/>
+        <line x1="130" y1="10"  x2="116" y2="52"  stroke="rgba(120,118,200,0.07)" stroke-width="1"/>
+        <line x1="165" y1="45"  x2="151" y2="87"  stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="200" y1="15"  x2="186" y2="57"  stroke="rgba(120,118,200,0.12)" stroke-width="1"/>
+        <line x1="240" y1="35"  x2="226" y2="77"  stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+        <line x1="275" y1="8"   x2="261" y2="50"  stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="310" y1="55"  x2="296" y2="97"  stroke="rgba(120,118,200,0.07)" stroke-width="1"/>
+        <line x1="350" y1="20"  x2="336" y2="62"  stroke="rgba(120,118,200,0.15)" stroke-width="1"/>
+        <line x1="390" y1="40"  x2="376" y2="82"  stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+        <line x1="18"  y1="170" x2="4"   y2="212" stroke="rgba(120,118,200,0.12)" stroke-width="1"/>
+        <line x1="55"  y1="190" x2="41"  y2="232" stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="110" y1="160" x2="96"  y2="202" stroke="rgba(120,118,200,0.07)" stroke-width="1"/>
+        <line x1="155" y1="200" x2="141" y2="242" stroke="rgba(120,118,200,0.15)" stroke-width="1"/>
+        <line x1="210" y1="175" x2="196" y2="217" stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+        <line x1="260" y1="195" x2="246" y2="237" stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="315" y1="165" x2="301" y2="207" stroke="rgba(120,118,200,0.07)" stroke-width="1"/>
+        <line x1="370" y1="185" x2="356" y2="227" stroke="rgba(120,118,200,0.12)" stroke-width="1"/>
+        <line x1="405" y1="155" x2="391" y2="197" stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="40"  y1="400" x2="26"  y2="442" stroke="rgba(120,118,200,0.15)" stroke-width="1"/>
+        <line x1="85"  y1="420" x2="71"  y2="462" stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+        <line x1="135" y1="390" x2="121" y2="432" stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="185" y1="415" x2="171" y2="457" stroke="rgba(120,118,200,0.07)" stroke-width="1"/>
+        <line x1="230" y1="400" x2="216" y2="442" stroke="rgba(120,118,200,0.12)" stroke-width="1"/>
+        <line x1="285" y1="430" x2="271" y2="472" stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="335" y1="395" x2="321" y2="437" stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+        <line x1="385" y1="410" x2="371" y2="452" stroke="rgba(120,118,200,0.15)" stroke-width="1"/>
+        <line x1="70"  y1="650" x2="56"  y2="692" stroke="rgba(120,118,200,0.12)" stroke-width="1"/>
+        <line x1="160" y1="670" x2="146" y2="712" stroke="rgba(120,118,200,0.18)" stroke-width="1"/>
+        <line x1="255" y1="640" x2="241" y2="682" stroke="rgba(120,118,200,0.07)" stroke-width="1"/>
+        <line x1="345" y1="660" x2="331" y2="702" stroke="rgba(120,118,200,0.15)" stroke-width="1"/>
+        <line x1="415" y1="645" x2="401" y2="687" stroke="rgba(120,118,200,0.10)" stroke-width="1"/>
+    </svg>
+</div>
+
+<div class="page">
+
+    <!-- ─── HEADER ─── -->
+    <div class="header">
+        <div class="eye-wrap">
+            <!-- Teardrop + arc ripples scene -->
+            <svg class="scene-svg" width="172" height="172" viewBox="0 0 172 172" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="tearGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#C8C6F5"/>
+                        <stop offset="100%" stop-color="#5552C0"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Rain lines crossing the teardrop area -->
+                <line x1="72"  y1="22" x2="60"  y2="58"  stroke="rgba(142,140,232,0.2)" stroke-width="1.2"/>
+                <line x1="90"  y1="18" x2="78"  y2="54"  stroke="rgba(142,140,232,0.2)" stroke-width="1.2"/>
+                <line x1="108" y1="26" x2="96"  y2="62"  stroke="rgba(142,140,232,0.2)" stroke-width="1.2"/>
+
+                <!-- Teardrop shape -->
+                <path d="M86 30 C70 50 58 68 58 80 C58 97 71 108 86 108 C101 108 114 97 114 80 C114 68 102 50 86 30 Z" fill="url(#tearGrad)"/>
+
+                <!-- White highlight dot inside teardrop -->
+                <circle cx="78" cy="60" r="5" fill="rgba(255,255,255,0.6)"/>
+
+                <!-- Arc ripples below (water ripple rings) -->
+                <path d="M60 120 Q86 108 112 120" stroke="rgba(142,140,232,0.5)" stroke-width="1.5" fill="none"/>
+                <path d="M48 132 Q86 116 124 132" stroke="rgba(142,140,232,0.35)" stroke-width="1.5" fill="none"/>
+                <path d="M36 144 Q86 124 136 144" stroke="rgba(142,140,232,0.2)" stroke-width="1.5" fill="none"/>
+            </svg>
+        </div>
+
+        <p class="feeling-label">feeling</p>
+        <h1 class="emotion-name">sad</h1>
+        <p class="emotion-tags">heavy · grieving · tearful</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── ACTIVITIES ─── -->
+    <p class="section-label">Try one of these right now</p>
+
+    <div class="activities">
+
+        <!-- Activity 1: One Small Meaningful Action -->
+        <div class="activity-card">
+            <div class="activity-head">
+                <div class="activity-icon">🌱</div>
+                <div>
+                    <div class="activity-title">One Small Action</div>
+                    <div class="activity-sub">Don't think your way out — move your way out</div>
+                </div>
+            </div>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-num">1</span>
+                    <span class="step-text"><strong>Don't try to think your way out</strong> — it won't work right now</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-text">Choose one: make a <strong>warm drink</strong>, put on <strong>one song</strong> you like, or step <strong>outside for 2 minutes</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-text"><strong>Do only that one thing</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-text">Return and breathe</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-text">Notice: <strong>the heaviness has shifted</strong> — even slightly</span>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Activity 2: Gentle Body Movement -->
+        <div class="activity-card">
+            <div class="activity-head">
+                <div class="activity-icon">🤸</div>
+                <div>
+                    <div class="activity-title">Gentle Movement</div>
+                    <div class="activity-sub">Stillness feeds sadness — motion breaks it</div>
+                </div>
+            </div>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-num">1</span>
+                    <span class="step-text"><strong>Stand up slowly</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-text">Stretch your arms <strong>above your head</strong> — hold 5 seconds</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-text">Roll your <strong>shoulders back</strong> 5 times</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-text">Take <strong>3 slow deep breaths</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-text"><strong>Wash your face</strong> or drink a glass of water</span>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+    <!-- ─── TIMER ─── -->
+    <div class="timer-section">
+        <div class="timer-card">
+            <p class="timer-label">5-minute reset timer</p>
+            <div class="timer-ring-wrap">
+                <svg class="timer-ring" viewBox="0 0 138 138">
+                    <circle class="ring-bg"   cx="69" cy="69" r="62"/>
+                    <circle class="ring-prog" cx="69" cy="69" r="62" id="ringProg"/>
+                </svg>
+                <div class="timer-time" id="timerTime">5:00</div>
+                <div class="timer-subs" id="timerSubs">tap to begin</div>
+            </div>
+            <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">
+                <svg width="13" height="14" viewBox="0 0 13 14" fill="none" id="btnIcon"><polygon points="0,0 13,7 0,14" fill="white"/></svg>
+                <span id="btnLabel">Start Timer</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── FEEL BETTER ─── -->
+    <div class="feel-better-section">
+        <button class="feel-better-btn" onclick="showSuccess()">
+            I feel better — I've overcome the urge ✓
+        </button>
+    </div>
+
+</div><!-- /page -->
+
+
+<!-- ─── SUCCESS OVERLAY ─── -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-eye">
+        <!-- Smaller teardrop SVG ~100px -->
+        <svg width="100" height="100" viewBox="0 0 172 172" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: drop 5s ease-in-out infinite;">
+            <defs>
+                <linearGradient id="tearGradSuccess" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#C8C6F5"/>
+                    <stop offset="100%" stop-color="#5552C0"/>
+                </linearGradient>
+            </defs>
+            <path d="M86 30 C70 50 58 68 58 80 C58 97 71 108 86 108 C101 108 114 97 114 80 C114 68 102 50 86 30 Z" fill="url(#tearGradSuccess)"/>
+            <circle cx="78" cy="60" r="5" fill="rgba(255,255,255,0.6)"/>
+            <path d="M60 120 Q86 108 112 120" stroke="rgba(142,140,232,0.5)" stroke-width="1.5" fill="none"/>
+            <path d="M48 132 Q86 116 124 132" stroke="rgba(142,140,232,0.35)" stroke-width="1.5" fill="none"/>
+            <path d="M36 144 Q86 124 136 144" stroke="rgba(142,140,232,0.2)" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="check-mark">✓</div>
+    </div>
+
+    <h2 class="success-title">Well done.</h2>
+    <p class="success-sub">You moved through it instead of numbing it. That's how healing actually works.</p>
+    <p class="success-note">Tap your card again if you need support</p>
+</div>
+
+
+<script>
+    // ─── TIMER ───────────────────────────────────────────────
+    const TOTAL = 5 * 60;
+    const CIRC  = 2 * Math.PI * 62; // ≈ 389.6
+
+    let remaining = TOTAL;
+    let running   = false;
+    let ticker    = null;
+
+    const timeEl  = document.getElementById('timerTime');
+    const subsEl  = document.getElementById('timerSubs');
+    const progEl  = document.getElementById('ringProg');
+    const btnEl   = document.getElementById('timerBtn');
+    const iconEl  = document.getElementById('btnIcon');
+    const labelEl = document.getElementById('btnLabel');
+
+    progEl.style.strokeDasharray  = CIRC;
+    progEl.style.strokeDashoffset = 0;
+
+    function fmt(s) {
+        const m  = Math.floor(s / 60);
+        const ss = s % 60;
+        return `${m}:${ss.toString().padStart(2,'0')}`;
+    }
+
+    function updateRing() {
+        const fraction = remaining / TOTAL;
+        progEl.style.strokeDashoffset = CIRC * (1 - fraction);
+    }
+
+    function setPauseUI() {
+        iconEl.innerHTML = '<rect x="0" y="0" width="4" height="14" fill="white" rx="1"/><rect x="7" y="0" width="4" height="14" fill="white" rx="1"/>';
+        labelEl.textContent = 'Pause';
+        subsEl.textContent  = 'in progress…';
+    }
+
+    function setResumeUI() {
+        iconEl.innerHTML = '<polygon points="0,0 13,7 0,14" fill="white"/>';
+        labelEl.textContent = 'Resume';
+        subsEl.textContent  = 'paused';
+    }
+
+    function setStartUI() {
+        iconEl.innerHTML = '<polygon points="0,0 13,7 0,14" fill="white"/>';
+        labelEl.textContent = 'Start Timer';
+        subsEl.textContent  = 'tap to begin';
+    }
+
+    function setRestartUI() {
+        iconEl.innerHTML = '<path d="M11 2.5A6 6 0 1 0 12.5 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><polygon points="8,0 13,5 8,10" fill="white"/>';
+        labelEl.textContent = 'Restart';
+        subsEl.textContent  = 'done';
+    }
+
+    function toggleTimer() {
+        if (remaining === 0) {
+            // restart
+            remaining = TOTAL;
+            timeEl.textContent = fmt(TOTAL);
+            updateRing();
+            setStartUI();
+            return;
+        }
+        if (running) {
+            clearInterval(ticker);
+            running = false;
+            setResumeUI();
+        } else {
+            running = true;
+            setPauseUI();
+            ticker = setInterval(() => {
+                remaining--;
+                timeEl.textContent = fmt(remaining);
+                updateRing();
+                if (remaining <= 0) {
+                    clearInterval(ticker);
+                    running = false;
+                    setRestartUI();
+                    // subtle vibration on supported devices
+                    if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
+                }
+            }, 1000);
+        }
+    }
+
+    // ─── SUCCESS ─────────────────────────────────────────────
+    function showSuccess() {
+        if (running) { clearInterval(ticker); running = false; }
+        document.getElementById('successOverlay').classList.add('show');
+        if (navigator.vibrate) navigator.vibrate([60, 40, 120]);
+    }
+</script>
+</body>
+</html>

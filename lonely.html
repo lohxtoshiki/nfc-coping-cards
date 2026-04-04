@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Feeling Lonely</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:         #060C24;
+            --bg-deep:    #030818;
+            --bg-darkest: #01040E;
+            --c1:         #0A1640;
+            --c2:         #112560;
+            --c3:         #1E4090;
+            --c4:         #3A6AC0;
+            --cdot:       #B8D4FF;
+            --text:       #FFFFFF;
+            --dim:        rgba(255,255,255,0.65);
+            --dimmer:     rgba(255,255,255,0.38);
+            --card:       rgba(255,255,255,0.07);
+            --border:     rgba(255,255,255,0.11);
+            --accent:     #5E9AE8;
+            --accent-glow:rgba(94,154,232,0.35);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        html, body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Radial depth gradient */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 90%, var(--bg-darkest) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 50% at 85% 10%, rgba(20,50,120,0.4) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient wave lines — full page background */
+        .bg-waves {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 420px;
+            margin: 0 auto;
+            padding-bottom: 52px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            padding: 56px 24px 36px;
+            text-align: center;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) both;
+        }
+
+        /* Sailboat scene container */
+        .eye-wrap {
+            width: 172px;
+            height: 172px;
+            margin: 0 auto 28px;
+        }
+
+        .scene-svg {
+            animation: bob 4s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-6px); }
+        }
+
+        .feeling-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 17px;
+            letter-spacing: 0.32em;
+            color: var(--dim);
+            margin-bottom: 6px;
+        }
+
+        .emotion-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 62px;
+            line-height: 1;
+            letter-spacing: -0.015em;
+            margin-bottom: 10px;
+        }
+
+        .emotion-tags {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: var(--dimmer);
+            letter-spacing: 0.12em;
+        }
+
+        /* ─── DIVIDER ─── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 24px 28px;
+        }
+
+        /* ─── SECTION LABEL ─── */
+        .section-label {
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            padding: 0 24px;
+            margin-bottom: 14px;
+        }
+
+        /* ─── ACTIVITY CARDS ─── */
+        .activities {
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.12s both;
+        }
+
+        .activity-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .activity-head {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 18px;
+        }
+
+        .activity-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: rgba(94,154,232,0.18);
+            border: 1px solid rgba(94,154,232,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .activity-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 22px;
+            line-height: 1.15;
+        }
+
+        .activity-sub {
+            font-size: 11.5px;
+            color: var(--dimmer);
+            margin-top: 3px;
+            letter-spacing: 0.02em;
+        }
+
+        .steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .step {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(94,154,232,0.2);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text {
+            font-size: 14.5px;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .step-text strong { color: #fff; font-weight: 500; }
+
+        /* ─── TIMER ─── */
+        .timer-section {
+            padding: 0 24px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.22s both;
+        }
+
+        .timer-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px 20px 26px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .timer-label {
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 22px;
+        }
+
+        .timer-ring-wrap {
+            position: relative;
+            width: 138px;
+            height: 138px;
+            margin: 0 auto 22px;
+        }
+
+        .timer-ring {
+            width: 138px;
+            height: 138px;
+            transform: rotate(-90deg);
+            display: block;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.09);
+            stroke-width: 3.5;
+        }
+
+        .ring-prog {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-dasharray: 390.1; /* 2π×62 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
+        }
+
+        .timer-time {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .timer-subs {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--dimmer);
+            white-space: nowrap;
+        }
+
+        .timer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 30px;
+            border-radius: 100px;
+            border: 1.5px solid rgba(94,154,232,0.45);
+            background: rgba(94,154,232,0.13);
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+            transition: background 0.18s, transform 0.12s;
+        }
+
+        .timer-btn:active {
+            background: rgba(94,154,232,0.28);
+            transform: scale(0.97);
+        }
+
+        /* ─── FEEL BETTER BUTTON ─── */
+        .feel-better-section {
+            padding: 0 24px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.32s both;
+        }
+
+        .feel-better-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            border: none;
+            background: #fff;
+            color: var(--bg-deep);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15.5px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.01em;
+            transition: opacity 0.15s, transform 0.12s;
+        }
+
+        .feel-better-btn:active {
+            transform: scale(0.98);
+            opacity: 0.88;
+        }
+
+        /* ─── SUCCESS OVERLAY ─── */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 32px;
+        }
+
+        .success-overlay.show { display: flex; animation: fadeIn 0.4s ease both; }
+
+        .success-scene {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .success-scene .scene-svg {
+            width: 100px;
+            height: 100px;
+        }
+
+        .check-mark {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 28px;
+            z-index: 1;
+        }
+
+        .success-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 48px;
+            margin-bottom: 14px;
+        }
+
+        .success-sub {
+            font-size: 15.5px;
+            line-height: 1.65;
+            color: var(--dim);
+            max-width: 290px;
+        }
+
+        .success-note {
+            margin-top: 28px;
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dimmer);
+        }
+
+        /* ─── KEYFRAMES ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Background ambient waves + stars -->
+<div class="bg-waves">
+    <svg width="100%" height="100%" viewBox="0 0 420 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Gentle ocean waves -->
+        <path d="M-40 400 Q105 375 210 400 Q315 425 460 400" stroke="rgba(60,106,192,0.15)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 440 Q105 415 210 440 Q315 465 460 440" stroke="rgba(60,106,192,0.14)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 480 Q105 456 210 480 Q315 504 460 480" stroke="rgba(60,106,192,0.12)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 520 Q105 497 210 520 Q315 543 460 520" stroke="rgba(60,106,192,0.10)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 560 Q105 537 210 560 Q315 583 460 560" stroke="rgba(60,106,192,0.09)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 600 Q105 577 210 600 Q315 623 460 600" stroke="rgba(60,106,192,0.08)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 640 Q105 618 210 640 Q315 662 460 640" stroke="rgba(60,106,192,0.07)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 680 Q105 658 210 680 Q315 702 460 680" stroke="rgba(60,106,192,0.06)" stroke-width="1.2" fill="none"/>
+        <!-- Stars scattered in upper half -->
+        <circle cx="42"  cy="68"  r="1.5" fill="rgba(184,212,255,0.4)"/>
+        <circle cx="118" cy="112" r="1.5" fill="rgba(184,212,255,0.35)"/>
+        <circle cx="195" cy="50"  r="1.5" fill="rgba(184,212,255,0.45)"/>
+        <circle cx="267" cy="88"  r="1.5" fill="rgba(184,212,255,0.3)"/>
+        <circle cx="340" cy="130" r="1.5" fill="rgba(184,212,255,0.4)"/>
+        <circle cx="388" cy="62"  r="1.5" fill="rgba(184,212,255,0.35)"/>
+        <circle cx="74"  cy="195" r="1.5" fill="rgba(184,212,255,0.28)"/>
+        <circle cx="312" cy="220" r="1.5" fill="rgba(184,212,255,0.25)"/>
+        <!-- Crescent moon in upper area -->
+        <circle cx="370" cy="90" r="18" fill="rgba(17,37,96,0.5)"/>
+        <circle cx="378" cy="85" r="14" fill="rgba(6,12,36,0.85)"/>
+    </svg>
+</div>
+
+<div class="page">
+
+    <!-- ─── HEADER ─── -->
+    <div class="header">
+        <div class="eye-wrap">
+            <svg class="scene-svg" width="172" height="172" viewBox="0 0 172 172" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background dark world circle -->
+                <circle cx="86" cy="86" r="82" fill="#0A1640"/>
+                <!-- Crescent moon -->
+                <circle cx="86" cy="38" r="22" fill="#112560"/>
+                <circle cx="96" cy="34" r="18" fill="#060C24"/>
+                <!-- Stars in upper half -->
+                <circle cx="44"  cy="28" r="1.5" fill="rgba(184,212,255,0.55)"/>
+                <circle cx="130" cy="22" r="1.2" fill="rgba(184,212,255,0.45)"/>
+                <circle cx="58"  cy="52" r="1.0" fill="rgba(184,212,255,0.4)"/>
+                <circle cx="118" cy="48" r="1.3" fill="rgba(184,212,255,0.5)"/>
+                <circle cx="148" cy="36" r="1.0" fill="rgba(184,212,255,0.35)"/>
+                <circle cx="30"  cy="58" r="1.2" fill="rgba(184,212,255,0.38)"/>
+                <!-- Distant small boat (background, dimmer) -->
+                <polygon points="138,78 138,92 126,92" fill="rgba(30,64,144,0.45)"/>
+                <path d="M124 92 Q131 96 138 92" stroke="rgba(58,106,192,0.4)" stroke-width="1.2" fill="none"/>
+                <!-- Wave lines across the middle -->
+                <path d="M10 95 Q45 85 86 95 Q127 105 162 95"  stroke="rgba(94,154,232,0.4)"  stroke-width="1.5" fill="none"/>
+                <path d="M10 105 Q45 95 86 105 Q127 115 162 105" stroke="rgba(94,154,232,0.28)" stroke-width="1.5" fill="none"/>
+                <path d="M10 115 Q45 106 86 115 Q127 124 162 115" stroke="rgba(94,154,232,0.18)" stroke-width="1.5" fill="none"/>
+                <!-- Sailboat: triangle sail -->
+                <polygon points="86,55 86,90 62,90" fill="#1E4090"/>
+                <!-- Sailboat: mast -->
+                <line x1="86" y1="55" x2="86" y2="90" stroke="#3A6AC0" stroke-width="1.2"/>
+                <!-- Sailboat: hull arc -->
+                <path d="M58 90 Q86 98 114 90" stroke="#3A6AC0" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+
+        <p class="feeling-label">feeling</p>
+        <h1 class="emotion-name">lonely</h1>
+        <p class="emotion-tags">isolated · unseen · distant</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── ACTIVITIES ─── -->
+    <p class="section-label">Try one of these right now</p>
+
+    <div class="activities">
+
+        <!-- Activity 1: Send a Voice Note -->
+        <div class="activity-card">
+            <div class="activity-head">
+                <div class="activity-icon">🎙️</div>
+                <div>
+                    <div class="activity-title">Send a Voice Note</div>
+                    <div class="activity-sub">Creates real connection, not just scrolling</div>
+                </div>
+            </div>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-num">1</span>
+                    <span class="step-text">Think of <strong>one person</strong> — anyone.</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-text">Open <strong>WhatsApp</strong> or any messenger.</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-text">Record a <strong>30-second voice note</strong> — just say hi, say what you feel.</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-text"><strong>Send it.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-text">Return here and <strong>breathe.</strong></span>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Activity 2: Self-Compassion Moment -->
+        <div class="activity-card">
+            <div class="activity-head">
+                <div class="activity-icon">🤲</div>
+                <div>
+                    <div class="activity-title">Self-Compassion Touch</div>
+                    <div class="activity-sub">You are not as alone as it feels right now</div>
+                </div>
+            </div>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-num">1</span>
+                    <span class="step-text">Place <strong>one hand on your chest.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-text"><strong>Close your eyes.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-text">Say quietly: <em>"This feeling is real. I'm not alone in it."</em></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-text">Think of <strong>one person who cares</strong> about you.</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-text">Breathe slowly for <strong>1 minute.</strong></span>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+    <!-- ─── TIMER ─── -->
+    <div class="timer-section">
+        <div class="timer-card">
+            <p class="timer-label">5-minute reset timer</p>
+            <div class="timer-ring-wrap">
+                <svg class="timer-ring" viewBox="0 0 138 138">
+                    <circle class="ring-bg"   cx="69" cy="69" r="62"/>
+                    <circle class="ring-prog" cx="69" cy="69" r="62" id="ringProg"/>
+                </svg>
+                <div class="timer-time" id="timerTime">5:00</div>
+                <div class="timer-subs" id="timerSubs">tap to begin</div>
+            </div>
+            <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">
+                <svg width="13" height="14" viewBox="0 0 13 14" fill="none" id="btnIcon"><polygon points="0,0 13,7 0,14" fill="white"/></svg>
+                <span id="btnLabel">Start Timer</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── FEEL BETTER ─── -->
+    <div class="feel-better-section">
+        <button class="feel-better-btn" onclick="showSuccess()">
+            I feel better — I've overcome the urge ✓
+        </button>
+    </div>
+
+</div><!-- /page -->
+
+
+<!-- ─── SUCCESS OVERLAY ─── -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-scene">
+        <svg class="scene-svg" width="100" height="100" viewBox="0 0 172 172" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="86" cy="86" r="82" fill="#0A1640"/>
+            <circle cx="86" cy="38" r="22" fill="#112560"/>
+            <circle cx="96" cy="34" r="18" fill="#060C24"/>
+            <circle cx="44"  cy="28" r="1.5" fill="rgba(184,212,255,0.55)"/>
+            <circle cx="130" cy="22" r="1.2" fill="rgba(184,212,255,0.45)"/>
+            <circle cx="118" cy="48" r="1.3" fill="rgba(184,212,255,0.5)"/>
+            <circle cx="148" cy="36" r="1.0" fill="rgba(184,212,255,0.35)"/>
+            <path d="M10 95 Q45 85 86 95 Q127 105 162 95"  stroke="rgba(94,154,232,0.4)"  stroke-width="1.5" fill="none"/>
+            <path d="M10 105 Q45 95 86 105 Q127 115 162 105" stroke="rgba(94,154,232,0.28)" stroke-width="1.5" fill="none"/>
+            <path d="M10 115 Q45 106 86 115 Q127 124 162 115" stroke="rgba(94,154,232,0.18)" stroke-width="1.5" fill="none"/>
+            <polygon points="86,55 86,90 62,90" fill="#1E4090"/>
+            <line x1="86" y1="55" x2="86" y2="90" stroke="#3A6AC0" stroke-width="1.2"/>
+            <path d="M58 90 Q86 98 114 90" stroke="#3A6AC0" stroke-width="2" fill="none"/>
+        </svg>
+        <div class="check-mark">✓</div>
+    </div>
+
+    <h2 class="success-title">Well done.</h2>
+    <p class="success-sub">Reaching out — even to yourself — breaks the cycle. You're more connected than you feel.</p>
+    <p class="success-note">Tap your card again if you need support</p>
+</div>
+
+
+<script>
+    // ─── TIMER ───────────────────────────────────────────────
+    const TOTAL = 5 * 60;
+    const CIRC  = 2 * Math.PI * 62; // ≈ 389.6
+
+    let remaining = TOTAL;
+    let running   = false;
+    let ticker    = null;
+
+    const timeEl  = document.getElementById('timerTime');
+    const subsEl  = document.getElementById('timerSubs');
+    const progEl  = document.getElementById('ringProg');
+    const btnEl   = document.getElementById('timerBtn');
+    const iconEl  = document.getElementById('btnIcon');
+    const labelEl = document.getElementById('btnLabel');
+
+    progEl.style.strokeDasharray  = CIRC;
+    progEl.style.strokeDashoffset = 0;
+
+    function fmt(s) {
+        const m  = Math.floor(s / 60);
+        const ss = s % 60;
+        return `${m}:${ss.toString().padStart(2,'0')}`;
+    }
+
+    function updateRing() {
+        const fraction = remaining / TOTAL;
+        progEl.style.strokeDashoffset = CIRC * (1 - fraction);
+    }
+
+    function setPauseUI() {
+        iconEl.innerHTML = '<rect x="0" y="0" width="4" height="14" fill="white" rx="1"/><rect x="7" y="0" width="4" height="14" fill="white" rx="1"/>';
+        labelEl.textContent = 'Pause';
+        subsEl.textContent  = 'in progress…';
+    }
+
+    function setResumeUI() {
+        iconEl.innerHTML = '<polygon points="0,0 13,7 0,14" fill="white"/>';
+        labelEl.textContent = 'Resume';
+        subsEl.textContent  = 'paused';
+    }
+
+    function setStartUI() {
+        iconEl.innerHTML = '<polygon points="0,0 13,7 0,14" fill="white"/>';
+        labelEl.textContent = 'Start Timer';
+        subsEl.textContent  = 'tap to begin';
+    }
+
+    function setRestartUI() {
+        iconEl.innerHTML = '<path d="M11 2.5A6 6 0 1 0 12.5 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><polygon points="8,0 13,5 8,10" fill="white"/>';
+        labelEl.textContent = 'Restart';
+        subsEl.textContent  = 'done';
+    }
+
+    function toggleTimer() {
+        if (remaining === 0) {
+            // restart
+            remaining = TOTAL;
+            timeEl.textContent = fmt(TOTAL);
+            updateRing();
+            setStartUI();
+            return;
+        }
+        if (running) {
+            clearInterval(ticker);
+            running = false;
+            setResumeUI();
+        } else {
+            running = true;
+            setPauseUI();
+            ticker = setInterval(() => {
+                remaining--;
+                timeEl.textContent = fmt(remaining);
+                updateRing();
+                if (remaining <= 0) {
+                    clearInterval(ticker);
+                    running = false;
+                    setRestartUI();
+                    // subtle vibration on supported devices
+                    if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
+                }
+            }, 1000);
+        }
+    }
+
+    // ─── SUCCESS ─────────────────────────────────────────────
+    function showSuccess() {
+        if (running) { clearInterval(ticker); running = false; }
+        document.getElementById('successOverlay').classList.add('show');
+        if (navigator.vibrate) navigator.vibrate([60, 40, 120]);
+    }
+</script>
+</body>
+</html>
