@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Feeling Stressed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:         #3128C2;
+            --bg-deep:    #1B1180;
+            --bg-darkest: #0E0A50;
+            --c1:         #231A9E;
+            --c2:         #3D30C8;
+            --c3:         #6352DC;
+            --c4:         #9080E8;
+            --cdot:       #D0C8F8;
+            --text:       #FFFFFF;
+            --dim:        rgba(255,255,255,0.65);
+            --dimmer:     rgba(255,255,255,0.38);
+            --card:       rgba(255,255,255,0.07);
+            --border:     rgba(255,255,255,0.11);
+            --accent:     #A898F0;
+            --accent-glow:rgba(168,152,240,0.35);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        html, body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Radial depth gradient */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 90%, var(--bg-darkest) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 50% at 85% 10%, rgba(80,60,210,0.35) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient wave lines — full page background */
+        .bg-waves {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 420px;
+            margin: 0 auto;
+            padding-bottom: 52px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            padding: 56px 24px 36px;
+            text-align: center;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) both;
+        }
+
+        /* Eye / concentric circles */
+        .eye-wrap {
+            position: relative;
+            width: 172px;
+            height: 172px;
+            margin: 0 auto 28px;
+        }
+
+        .circle {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 50%;
+        }
+
+        .c1 { width:172px; height:172px; background:var(--c1); animation: breathe 5s ease-in-out infinite; }
+        .c2 { width:130px; height:130px; background:var(--c2); animation: breathe 5s ease-in-out infinite 0.25s; }
+        .c3 { width: 90px; height: 90px;  background:var(--c3); animation: breathe 5s ease-in-out infinite 0.5s; }
+        .c4 { width: 50px; height: 50px;  background:var(--c4); animation: breathe 5s ease-in-out infinite 0.75s; }
+        .cdot{ width:19px; height:19px;   background:var(--cdot); box-shadow: 0 0 14px 4px rgba(208,200,248,0.5); animation: breathe 5s ease-in-out infinite 1s; }
+
+        @keyframes breathe {
+            0%,100% { transform: translate(-50%,-50%) scale(1);    opacity: 1; }
+            50%      { transform: translate(-50%,-50%) scale(1.06); opacity: 0.88; }
+        }
+
+        /* Wave lines that cross the eye (matching card art) */
+        .eye-waves {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 340px;
+            height: 200px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .feeling-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 17px;
+            letter-spacing: 0.32em;
+            color: var(--dim);
+            margin-bottom: 6px;
+        }
+
+        .emotion-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 62px;
+            line-height: 1;
+            letter-spacing: -0.015em;
+            margin-bottom: 10px;
+        }
+
+        .emotion-tags {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: var(--dimmer);
+            letter-spacing: 0.12em;
+        }
+
+        /* ─── DIVIDER ─── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 24px 28px;
+        }
+
+        /* ─── SECTION LABEL ─── */
+        .section-label {
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            padding: 0 24px;
+            margin-bottom: 14px;
+        }
+
+        /* ─── ACTIVITY CARDS ─── */
+        .activities {
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.12s both;
+        }
+
+        .activity-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .activity-head {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 18px;
+        }
+
+        .activity-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: rgba(168,152,240,0.18);
+            border: 1px solid rgba(168,152,240,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .activity-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 22px;
+            line-height: 1.15;
+        }
+
+        .activity-sub {
+            font-size: 11.5px;
+            color: var(--dimmer);
+            margin-top: 3px;
+            letter-spacing: 0.02em;
+        }
+
+        .steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .step {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(168,152,240,0.2);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-text {
+            font-size: 14.5px;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .step-text strong { color: #fff; font-weight: 500; }
+
+        /* ─── TIMER ─── */
+        .timer-section {
+            padding: 0 24px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.22s both;
+        }
+
+        .timer-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px 20px 26px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .timer-label {
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 22px;
+        }
+
+        .timer-ring-wrap {
+            position: relative;
+            width: 138px;
+            height: 138px;
+            margin: 0 auto 22px;
+        }
+
+        .timer-ring {
+            width: 138px;
+            height: 138px;
+            transform: rotate(-90deg);
+            display: block;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.09);
+            stroke-width: 3.5;
+        }
+
+        .ring-prog {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-dasharray: 390.1; /* 2π×62 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 6px var(--accent-glow));
+        }
+
+        .timer-time {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .timer-subs {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--dimmer);
+            white-space: nowrap;
+        }
+
+        .timer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 30px;
+            border-radius: 100px;
+            border: 1.5px solid rgba(168,152,240,0.45);
+            background: rgba(168,152,240,0.13);
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14.5px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+            transition: background 0.18s, transform 0.12s;
+        }
+
+        .timer-btn:active {
+            background: rgba(168,152,240,0.28);
+            transform: scale(0.97);
+        }
+
+        /* ─── FEEL BETTER BUTTON ─── */
+        .feel-better-section {
+            padding: 0 24px;
+            animation: fadeUp 0.7s cubic-bezier(.22,.68,0,1.2) 0.32s both;
+        }
+
+        .feel-better-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            border: none;
+            background: #fff;
+            color: var(--bg-deep);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15.5px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 0.01em;
+            transition: opacity 0.15s, transform 0.12s;
+        }
+
+        .feel-better-btn:active {
+            transform: scale(0.98);
+            opacity: 0.88;
+        }
+
+        /* ─── SUCCESS OVERLAY ─── */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 200;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 48px 32px;
+        }
+
+        .success-overlay.show { display: flex; animation: fadeIn 0.4s ease both; }
+
+        .success-eye {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 32px;
+        }
+
+        .success-eye .c1 { width:100px; height:100px; }
+        .success-eye .c2 { width: 75px; height: 75px; }
+        .success-eye .c3 { width: 52px; height: 52px; }
+        .success-eye .c4 { width: 29px; height: 29px; }
+        .success-eye .cdot { width:11px; height:11px; }
+
+        .check-mark {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 28px;
+            z-index: 1;
+        }
+
+        .success-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            font-size: 48px;
+            margin-bottom: 14px;
+        }
+
+        .success-sub {
+            font-size: 15.5px;
+            line-height: 1.65;
+            color: var(--dim);
+            max-width: 290px;
+        }
+
+        .success-note {
+            margin-top: 28px;
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--dimmer);
+        }
+
+        /* ─── KEYFRAMES ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Background ambient waves -->
+<div class="bg-waves">
+    <svg width="100%" height="100%" viewBox="0 0 420 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M-40 180 Q100 150 210 180 Q320 210 460 180" stroke="rgba(130,120,210,0.18)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 220 Q100 192 210 220 Q320 248 460 220" stroke="rgba(130,120,210,0.14)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 260 Q100 235 210 260 Q320 285 460 260" stroke="rgba(130,120,210,0.10)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 480 Q120 445 230 480 Q340 515 460 480" stroke="rgba(130,120,210,0.14)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 520 Q120 487 230 520 Q340 553 460 520" stroke="rgba(130,120,210,0.10)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 560 Q120 529 230 560 Q340 591 460 560" stroke="rgba(130,120,210,0.07)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 740 Q140 700 230 740 Q320 780 460 740" stroke="rgba(130,120,210,0.12)" stroke-width="1.2" fill="none"/>
+        <path d="M-40 780 Q140 742 230 780 Q320 818 460 780" stroke="rgba(130,120,210,0.08)" stroke-width="1.2" fill="none"/>
+    </svg>
+</div>
+
+<div class="page">
+
+    <!-- ─── HEADER ─── -->
+    <div class="header">
+        <div class="eye-wrap">
+            <div class="circle c1"></div>
+            <div class="circle c2"></div>
+            <div class="circle c3"></div>
+            <div class="circle c4"></div>
+            <div class="circle cdot"></div>
+
+            <!-- Wave lines crossing the eye (replicating card art) -->
+            <svg class="eye-waves" viewBox="0 0 340 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Flowing horizontal waves -->
+                <path d="M0 60  Q85 38  170 60  Q255 82  340 60"  stroke="rgba(150,140,230,0.28)" stroke-width="1.4" fill="none"/>
+                <path d="M0 80  Q85 60  170 80  Q255 100 340 80"  stroke="rgba(150,140,230,0.22)" stroke-width="1.4" fill="none"/>
+                <path d="M0 100 Q85 80  170 100 Q255 120 340 100" stroke="rgba(150,140,230,0.18)" stroke-width="1.4" fill="none"/>
+                <path d="M0 120 Q85 100 170 120 Q255 140 340 120" stroke="rgba(150,140,230,0.14)" stroke-width="1.4" fill="none"/>
+                <path d="M0 140 Q85 122 170 140 Q255 158 340 140" stroke="rgba(150,140,230,0.10)" stroke-width="1.4" fill="none"/>
+                <!-- Diagonal lashes from upper-left -->
+                <path d="M90 0  Q115 45 125 95"  stroke="rgba(150,140,230,0.22)" stroke-width="1.4" fill="none"/>
+                <path d="M108 0 Q133 45 143 95" stroke="rgba(150,140,230,0.17)" stroke-width="1.4" fill="none"/>
+                <path d="M70 0  Q95 40  100 85"  stroke="rgba(150,140,230,0.14)" stroke-width="1.4" fill="none"/>
+                <!-- Diagonal lashes from upper-right -->
+                <path d="M250 0 Q225 45 215 95"  stroke="rgba(150,140,230,0.22)" stroke-width="1.4" fill="none"/>
+                <path d="M232 0 Q207 45 197 95"  stroke="rgba(150,140,230,0.17)" stroke-width="1.4" fill="none"/>
+                <path d="M270 0 Q248 40  240 85"  stroke="rgba(150,140,230,0.14)" stroke-width="1.4" fill="none"/>
+            </svg>
+        </div>
+
+        <p class="feeling-label">feeling</p>
+        <h1 class="emotion-name">stressed</h1>
+        <p class="emotion-tags">overwhelm · tension · pressure</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ─── ACTIVITIES ─── -->
+    <p class="section-label">Try one of these right now</p>
+
+    <div class="activities">
+
+        <!-- Activity 1: 4-7-8 Breathing -->
+        <div class="activity-card">
+            <div class="activity-head">
+                <div class="activity-icon">🌬️</div>
+                <div>
+                    <div class="activity-title">4-7-8 Breathing</div>
+                    <div class="activity-sub">Triggers your body's calm response</div>
+                </div>
+            </div>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-num">1</span>
+                    <span class="step-text"><strong>Exhale fully</strong> through your mouth.</span>
+                </li>
+                <li class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-text"><strong>Inhale through your nose</strong> for <strong>4 counts.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-text"><strong>Hold your breath</strong> for <strong>7 seconds.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-text"><strong>Exhale through your mouth</strong> for <strong>8 counts.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-text">Repeat <strong>4 times.</strong></span>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Activity 2: Cold Water Splash -->
+        <div class="activity-card">
+            <div class="activity-head">
+                <div class="activity-icon">💧</div>
+                <div>
+                    <div class="activity-title">Cold Water Reset</div>
+                    <div class="activity-sub">Interrupts the stress loop instantly</div>
+                </div>
+            </div>
+            <ol class="steps">
+                <li class="step">
+                    <span class="step-num">1</span>
+                    <span class="step-text"><strong>Walk to the nearest sink.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">2</span>
+                    <span class="step-text"><strong>Splash cold water</strong> on your face <strong>5–6 times.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">3</span>
+                    <span class="step-text">Hold <strong>wrists under cold water</strong> for <strong>30 seconds.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">4</span>
+                    <span class="step-text">Pat dry. <strong>Take 3 slow deep breaths.</strong></span>
+                </li>
+                <li class="step">
+                    <span class="step-num">5</span>
+                    <span class="step-text"><strong>Notice the urge has weakened.</strong></span>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+    <!-- ─── TIMER ─── -->
+    <div class="timer-section">
+        <div class="timer-card">
+            <p class="timer-label">5-minute reset timer</p>
+            <div class="timer-ring-wrap">
+                <svg class="timer-ring" viewBox="0 0 138 138">
+                    <circle class="ring-bg"   cx="69" cy="69" r="62"/>
+                    <circle class="ring-prog" cx="69" cy="69" r="62" id="ringProg"/>
+                </svg>
+                <div class="timer-time" id="timerTime">5:00</div>
+                <div class="timer-subs" id="timerSubs">tap to begin</div>
+            </div>
+            <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">
+                <svg width="13" height="14" viewBox="0 0 13 14" fill="none" id="btnIcon"><polygon points="0,0 13,7 0,14" fill="white"/></svg>
+                <span id="btnLabel">Start Timer</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── FEEL BETTER ─── -->
+    <div class="feel-better-section">
+        <button class="feel-better-btn" onclick="showSuccess()">
+            I feel better — I've overcome the urge ✓
+        </button>
+    </div>
+
+</div><!-- /page -->
+
+
+<!-- ─── SUCCESS OVERLAY ─── -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-eye" style="position:relative;width:100px;height:100px;margin:0 auto 32px;">
+        <div class="circle c1" style="width:100px;height:100px;"></div>
+        <div class="circle c2" style="width:75px;height:75px;"></div>
+        <div class="circle c3" style="width:52px;height:52px;"></div>
+        <div class="circle c4" style="width:29px;height:29px;"></div>
+        <div class="circle cdot" style="width:11px;height:11px;"></div>
+        <div class="check-mark">✓</div>
+    </div>
+
+    <h2 class="success-title">Well done.</h2>
+    <p class="success-sub">You chose something better. That's real strength — every urge you overcome makes the next one easier.</p>
+    <p class="success-note">Tap your card again if you need support</p>
+</div>
+
+
+<script>
+    // ─── TIMER ───────────────────────────────────────────────
+    const TOTAL = 5 * 60;
+    const CIRC  = 2 * Math.PI * 62; // ≈ 389.6
+
+    let remaining = TOTAL;
+    let running   = false;
+    let ticker    = null;
+
+    const timeEl  = document.getElementById('timerTime');
+    const subsEl  = document.getElementById('timerSubs');
+    const progEl  = document.getElementById('ringProg');
+    const btnEl   = document.getElementById('timerBtn');
+    const iconEl  = document.getElementById('btnIcon');
+    const labelEl = document.getElementById('btnLabel');
+
+    progEl.style.strokeDasharray  = CIRC;
+    progEl.style.strokeDashoffset = 0;
+
+    function fmt(s) {
+        const m  = Math.floor(s / 60);
+        const ss = s % 60;
+        return `${m}:${ss.toString().padStart(2,'0')}`;
+    }
+
+    function updateRing() {
+        const fraction = remaining / TOTAL;
+        progEl.style.strokeDashoffset = CIRC * (1 - fraction);
+    }
+
+    function setPauseUI() {
+        iconEl.innerHTML = '<rect x="0" y="0" width="4" height="14" fill="white" rx="1"/><rect x="7" y="0" width="4" height="14" fill="white" rx="1"/>';
+        labelEl.textContent = 'Pause';
+        subsEl.textContent  = 'in progress…';
+    }
+
+    function setResumeUI() {
+        iconEl.innerHTML = '<polygon points="0,0 13,7 0,14" fill="white"/>';
+        labelEl.textContent = 'Resume';
+        subsEl.textContent  = 'paused';
+    }
+
+    function setStartUI() {
+        iconEl.innerHTML = '<polygon points="0,0 13,7 0,14" fill="white"/>';
+        labelEl.textContent = 'Start Timer';
+        subsEl.textContent  = 'tap to begin';
+    }
+
+    function setRestartUI() {
+        iconEl.innerHTML = '<path d="M11 2.5A6 6 0 1 0 12.5 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><polygon points="8,0 13,5 8,10" fill="white"/>';
+        labelEl.textContent = 'Restart';
+        subsEl.textContent  = 'done';
+    }
+
+    function toggleTimer() {
+        if (remaining === 0) {
+            // restart
+            remaining = TOTAL;
+            timeEl.textContent = fmt(TOTAL);
+            updateRing();
+            setStartUI();
+            return;
+        }
+        if (running) {
+            clearInterval(ticker);
+            running = false;
+            setResumeUI();
+        } else {
+            running = true;
+            setPauseUI();
+            ticker = setInterval(() => {
+                remaining--;
+                timeEl.textContent = fmt(remaining);
+                updateRing();
+                if (remaining <= 0) {
+                    clearInterval(ticker);
+                    running = false;
+                    setRestartUI();
+                    // subtle vibration on supported devices
+                    if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
+                }
+            }, 1000);
+        }
+    }
+
+    // ─── SUCCESS ─────────────────────────────────────────────
+    function showSuccess() {
+        if (running) { clearInterval(ticker); running = false; }
+        document.getElementById('successOverlay').classList.add('show');
+        if (navigator.vibrate) navigator.vibrate([60, 40, 120]);
+    }
+</script>
+</body>
+</html>
