@@ -285,10 +285,17 @@
             filter: drop-shadow(0 0 6px var(--accent-glow));
         }
 
-        .timer-time {
+        .timer-center {
             position: absolute;
             top: 50%; left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .timer-time {
             font-family: 'Cormorant Garamond', serif;
             font-size: 40px;
             font-weight: 600;
@@ -297,10 +304,6 @@
         }
 
         .timer-subs {
-            position: absolute;
-            bottom: 22px;
-            left: 50%;
-            transform: translateX(-50%);
             font-size: 10px;
             letter-spacing: 0.12em;
             color: var(--dimmer);
@@ -587,8 +590,10 @@
                     <circle class="ring-bg"   cx="69" cy="69" r="62"/>
                     <circle class="ring-prog" cx="69" cy="69" r="62" id="ringProg"/>
                 </svg>
-                <div class="timer-time" id="timerTime">5:00</div>
-                <div class="timer-subs" id="timerSubs">tap to begin</div>
+                <div class="timer-center">
+                    <div class="timer-time" id="timerTime">5:00</div>
+                    <div class="timer-subs" id="timerSubs">tap to begin</div>
+                </div>
             </div>
             <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">
                 <svg width="13" height="14" viewBox="0 0 13 14" fill="none" id="btnIcon"><polygon points="0,0 13,7 0,14" fill="white"/></svg>
