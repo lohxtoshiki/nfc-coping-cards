@@ -667,7 +667,7 @@
       <p class="section-title">Your Stats</p>
       <div class="stats-grid">
         <div class="stat-card">
-          <p class="section-title" style="margin-bottom:8px">Yesterday</p>
+          <p class="section-title" style="margin-bottom:8px">Today</p>
           <div class="stat-num" id="stat-urges-yesterday">0</div>
           <div class="stat-label">urges overcome</div>
         </div>
@@ -677,7 +677,7 @@
           <div class="stat-label">urges overcome</div>
         </div>
         <div class="stat-card">
-          <p class="section-title" style="margin-bottom:8px">Yesterday</p>
+          <p class="section-title" style="margin-bottom:8px">Today</p>
           <div class="stat-num" id="stat-sticks-yesterday">0</div>
           <div class="stat-label">sticks smoked</div>
         </div>
@@ -687,8 +687,6 @@
           <div class="stat-label">sticks smoked</div>
         </div>
       </div>
-
-      <button class="log-today-btn" onclick="openLog()">📋 Log Today's Progress</button>
 
       <p class="dash-quote" id="dash-quote">"The first step is always the hardest."</p>
     </div>
@@ -1138,14 +1136,14 @@ function renderDashboard() {
   const start = new Date((profile.startDate || getToday()) + 'T00:00:00');
   const days  = Math.max(0, Math.floor((new Date() - start) / 86400000));
 
-  // Yesterday stats
-  const yesterday    = getDateOffset(-1);
-  const yLog         = logs.find(l => l.date === yesterday) || {};
-  const urgesYesterday = yLog.urges  || 0;
-  const sticksYesterday = yLog.sticks || 0;
+  // Today stats
+  const today        = getToday();
+  const todayLog     = logs.find(l => l.date === today) || {};
+  const urgesYesterday  = todayLog.urges  || 0;
+  const sticksYesterday = todayLog.sticks || 0;
 
-  // Last 7 days
-  const last7      = Array.from({ length: 7 }, (_, i) => getDateOffset(-i - 1));
+  // Last 7 days (including today)
+  const last7      = Array.from({ length: 7 }, (_, i) => getDateOffset(-i));
   const urgesWeek  = last7.reduce((s, d) => s + (logs.find(l => l.date === d)?.urges  || 0), 0);
   const sticksWeek = last7.reduce((s, d) => s + (logs.find(l => l.date === d)?.sticks || 0), 0);
 
