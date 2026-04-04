@@ -1192,6 +1192,12 @@ function renderDashboard() {
 // ════════════════════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (new URLSearchParams(window.location.search).has('reset')) {
+    localStorage.removeItem('bc_profile');
+    localStorage.removeItem('bc_logs');
+    sessionStorage.removeItem('bc_session');
+    window.history.replaceState({}, '', window.location.pathname);
+  }
   initWelcome();
   showScreen('screen-welcome');
   initIntro();
