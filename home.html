@@ -546,6 +546,9 @@
       <p style="color:var(--dim); font-size:15px; margin-bottom:40px">Enter your name to continue.</p>
       <input class="bc-input" type="text" id="login-name-input" placeholder="Your name" autocomplete="off" style="margin-bottom:32px">
       <button class="btn-primary" onclick="handleLoginContinue()">Continue →</button>
+      <button class="btn-ghost" onclick="startOnboarding()" style="width:100%;text-align:center;margin-top:4px;">
+        New here? Start onboarding →
+      </button>
     </div>
   </div>
 
@@ -819,6 +822,8 @@ function startLogin() {
 }
 
 function startOnboarding() {
+  // Clear any previous onboarding answers so a new person starts fresh
+  Object.keys(answers).forEach(k => delete answers[k]);
   showScreen('screen-onboard-intro');
   initIntro();
 }
