@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BreakCards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0D0B1E;
+    --surface:  rgba(255,255,255,0.06);
+    --surface2: rgba(255,255,255,0.10);
+    --border:   rgba(255,255,255,0.10);
+    --primary:  #3128C2;
+    --primary-l:#4A40D4;
+    --accent:   #A898F0;
+    --gold:     #F5C842;
+    --green:    #5CC98A;
+    --red:      #F07070;
+    --text:     #FFFFFF;
+    --dim:      rgba(255,255,255,0.60);
+    --dimmer:   rgba(255,255,255,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 100%, #09071A 0%, transparent 65%),
+      radial-gradient(ellipse 60% 50% at 80% 0%, rgba(49,40,194,0.25) 0%, transparent 60%);
+  }
+
+  #app {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ─── SCREEN BASE ─── */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 0;
+    flex-direction: column;
+  }
+  .screen.active {
+    display: flex;
+    animation: fadeUp 0.35s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50%       { transform: scale(1.08); opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--dim);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  /* ─── INPUTS ─── */
+  .bc-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(255,255,255,0.3);
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    padding: 10px 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .bc-input:focus { border-bottom-color: var(--accent); }
+  .bc-input::placeholder { color: var(--dimmer); }
+  input[type=number].bc-input::-webkit-inner-spin-button,
+  input[type=number].bc-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number].bc-input { -moz-appearance: textfield; }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    width: 100%;
+    padding: 17px;
+    background: white;
+    color: #1A1630;
+    border: none;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn-primary:active { opacity: 0.88; transform: scale(0.98); }
+
+  .btn-outline {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    color: white;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.45); }
+
+  .btn-ghost {
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 0;
+    letter-spacing: 0.02em;
+    display: inline-block;
+  }
+  .btn-ghost:hover { color: var(--text); }
+
+  /* ─── STAT CARDS ─── */
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 16px;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    margin-top: 6px;
+  }
+
+  .section-title {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  /* ─── BACK BUTTON ─── */
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.02em;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  /* ─── CONCENTRIC CIRCLES SVG ─── */
+  .concentric-motif {
+    animation: breathe 5s ease-in-out infinite;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--primary-l);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* ─── PROGRESS DOTS ─── */
+  .progress-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transition: background 0.2s;
+  }
+  .dot.active { background: var(--accent); }
+
+  /* ─── SELECT STYLES ─── */
+  select.bc-select {
+    background: #1A1630;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    flex: 1;
+  }
+  select.bc-select option {
+    background: #1A1630;
+    color: white;
+  }
+
+  /* ─── LOG OVERLAY ─── */
+  .log-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+  }
+  .log-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+  }
+  .log-sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 420px;
+    margin: 0 auto;
+    background: #1A1630;
+    border-radius: 24px 24px 0 0;
+    padding: 32px 24px 48px;
+    animation: slideUp 0.3s ease;
+  }
+
+  /* ─── DASHBOARD SCROLL ─── */
+  #screen-dashboard {
+    overflow-y: auto;
+  }
+  #screen-dashboard .inner {
+    padding: 56px 24px 80px;
+  }
+
+  /* ─── LABEL STYLE ─── */
+  .field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    margin-bottom: 8px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ─── INTRO CARD ─── */
+  .intro-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .intro-card-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .intro-card-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* ─── RING ─── */
+  .ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .ring-svg {
+    overflow: visible;
+  }
+  .ring-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+  }
+  .ring-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+  .ring-pct {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+  .ring-sub {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+  .ring-caption {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--dimmer);
+    margin-top: 10px;
+  }
+
+  /* ─── WELCOME SCREEN ─── */
+  #screen-welcome .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 32px;
+    text-align: center;
+    gap: 0;
+  }
+
+  /* ─── LOGIN SCREEN ─── */
+  #screen-login .inner {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 32px 40px;
+    min-height: 100vh;
+  }
+
+  /* ─── ONBOARD INTRO ─── */
+  #screen-onboard-intro .inner {
+    display: flex;
+    flex-direction: column;
+    padding: 48px 24px 40px;
+    min-height: 100vh;
+    gap: 20px;
+  }
+
+  /* ─── ONBOARD QUESTIONS ─── */
+  #screen-onboard-questions .inner {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 28px;
+    min-height: 100vh;
+  }
+
+  /* ─── TELEGRAM SCREEN ─── */
+  #screen-onboard-telegram .inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 32px;
+    text-align: center;
+    gap: 0;
+  }
+
+  /* ─── QUOTE ─── */
+  .dash-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--dim);
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 24px;
+    padding: 0 8px;
+  }
+
+  /* ─── GREETING ─── */
+  .greeting-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--dim);
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+  .greeting-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 6px;
+  }
+  .days-label {
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .log-today-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 17px;
+    background: white;
+    color: #1A1630;
+    border: none;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    text-align: center;
+  }
+  .log-today-btn:active { opacity: 0.88; transform: scale(0.98); }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══════════════════════════════════════
+       1. WELCOME SCREEN
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screen-welcome">
+    <div class="inner">
+
+      <!-- Default welcome (shown when not onboarded) -->
+      <div id="welcome-default">
+        <svg class="concentric-motif" width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:28px">
+          <circle cx="50" cy="50" r="48" stroke="rgba(168,152,240,0.3)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="40" stroke="rgba(168,152,240,0.45)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="32" stroke="rgba(168,152,240,0.58)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="22" stroke="rgba(168,152,240,0.72)" stroke-width="1.4"/>
+          <circle cx="50" cy="50" r="12" stroke="rgba(168,152,240,0.88)" stroke-width="1.6"/>
+        </svg>
+        <h1 class="brand" style="margin-bottom:12px">BreakCards</h1>
+        <p class="tagline" style="margin-bottom:48px">Your journey to freedom starts here.</p>
+        <button class="btn-primary" onclick="startLogin()" style="margin-bottom:16px">Log In</button>
+        <button class="btn-ghost" onclick="startOnboarding()">New here? Begin your journey →</button>
+      </div>
+
+      <!-- Welcome back variant (shown when onboarded) -->
+      <div id="welcome-back" style="display:none; flex-direction:column; align-items:center; width:100%">
+        <svg class="concentric-motif" width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:28px">
+          <circle cx="50" cy="50" r="48" stroke="rgba(168,152,240,0.3)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="40" stroke="rgba(168,152,240,0.45)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="32" stroke="rgba(168,152,240,0.58)" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="22" stroke="rgba(168,152,240,0.72)" stroke-width="1.4"/>
+          <circle cx="50" cy="50" r="12" stroke="rgba(168,152,240,0.88)" stroke-width="1.6"/>
+        </svg>
+        <p class="welcome-back-label" style="font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--dim); font-size:18px; margin-bottom:6px">Welcome back,</p>
+        <h1 id="wb-name" style="font-family:'Cormorant Garamond',serif; font-size:48px; font-weight:700; margin-bottom:40px; line-height:1.1">Friend</h1>
+        <button class="btn-primary" id="wb-dashboard-btn" onclick="handleWelcomeBackDashboard()" style="margin-bottom:16px">Go to Dashboard</button>
+        <button class="btn-ghost" onclick="showLoginAsOther()">Log In as someone else</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       2. LOGIN SCREEN
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screen-login">
+    <div class="inner">
+      <button class="back-btn" onclick="showScreen('screen-welcome')" style="margin-bottom:40px">← Back</button>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:600; margin-bottom:10px">What's your name?</h2>
+      <p style="color:var(--dim); font-size:15px; margin-bottom:40px">Enter your name to continue.</p>
+      <input class="bc-input" type="text" id="login-name-input" placeholder="Your name" autocomplete="off" style="margin-bottom:32px">
+      <button class="btn-primary" onclick="handleLoginContinue()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       3. ONBOARD INTRO CAROUSEL
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screen-onboard-intro">
+    <div class="inner">
+      <div class="progress-dots" id="intro-dots" style="margin-bottom:24px"></div>
+      <div class="intro-card" id="intro-card">
+        <p class="intro-card-num" id="intro-num">01 / 07</p>
+        <p class="intro-card-text" id="intro-text"></p>
+      </div>
+      <div style="margin-top:24px; display:flex; flex-direction:column; align-items:center; gap:12px">
+        <button class="btn-primary" id="intro-next-btn" onclick="nextIntroStep()">Next →</button>
+        <button class="btn-ghost" onclick="prevIntroStep()">← Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       4. ONBOARD QUESTIONS
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screen-onboard-questions">
+    <div class="inner">
+      <div class="progress-bar-track" style="margin-bottom:12px">
+        <div class="progress-bar-fill" id="q-progress-fill" style="width:0%"></div>
+      </div>
+      <p style="font-size:12px; color:var(--dimmer); letter-spacing:0.08em; margin-bottom:28px" id="q-step-label">Question 1 of 7</p>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:600; line-height:1.3; margin-bottom:32px" id="q-title">What's your name?</h2>
+
+      <!-- Text input -->
+      <div id="q-input-text-wrap">
+        <input class="bc-input" type="text" id="q-input-text" placeholder="" autocomplete="off">
+      </div>
+      <!-- Number input -->
+      <div id="q-input-number-wrap" style="display:none">
+        <input class="bc-input" type="number" id="q-input-number" placeholder="0" min="1">
+      </div>
+      <!-- Month/Year picker -->
+      <div id="q-input-date-wrap" style="display:none">
+        <div style="display:flex; gap:12px">
+          <select class="bc-select" id="q-month-select"></select>
+          <select class="bc-select" id="q-year-select"></select>
+        </div>
+      </div>
+
+      <div style="margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:14px">
+        <button class="btn-primary" id="q-next-btn" onclick="nextQuestion()">Next →</button>
+        <button class="btn-ghost" onclick="prevQuestion()">← Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       5. ONBOARD TELEGRAM
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screen-onboard-telegram">
+    <div class="inner">
+      <svg class="concentric-motif" width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:28px">
+        <circle cx="50" cy="50" r="48" stroke="rgba(168,152,240,0.3)" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="40" stroke="rgba(168,152,240,0.45)" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="32" stroke="rgba(168,152,240,0.58)" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="22" stroke="rgba(168,152,240,0.72)" stroke-width="1.4"/>
+        <circle cx="50" cy="50" r="12" stroke="rgba(168,152,240,0.88)" stroke-width="1.6"/>
+      </svg>
+      <h2 style="font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:700; margin-bottom:16px">You're all set.</h2>
+      <p style="color:var(--dim); font-size:16px; line-height:1.6; max-width:280px; margin-bottom:40px">Now create a Telegram Channel so your friends can support you on this journey.</p>
+      <button class="btn-primary" onclick="window.open('https://t.me/','_blank')" style="margin-bottom:14px">Open Telegram</button>
+      <button class="btn-outline" onclick="goToDashboard()">Skip, go to Dashboard →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       6. DASHBOARD
+  ══════════════════════════════════════ -->
+  <div class="screen" id="screen-dashboard">
+    <div class="inner">
+      <p class="greeting-label" id="dash-greeting-label">Good morning,</p>
+      <h1 class="greeting-name" id="dash-greeting-name">Friend</h1>
+      <p class="days-label" id="dash-days-label">0 days on this journey</p>
+
+      <!-- Progress ring -->
+      <div class="ring-wrap">
+        <div class="ring-container">
+          <svg class="ring-svg" width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background track -->
+            <circle cx="80" cy="80" r="70" stroke="rgba(255,255,255,0.08)" stroke-width="10" fill="none"/>
+            <!-- Progress arc -->
+            <circle id="ring-progress-arc"
+              cx="80" cy="80" r="70"
+              stroke="url(#ringGradient)"
+              stroke-width="10"
+              fill="none"
+              stroke-linecap="round"
+              transform="rotate(-90 80 80)"
+              stroke-dasharray="440"
+              stroke-dashoffset="440"
+            />
+            <defs>
+              <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#3128C2"/>
+                <stop offset="100%" stop-color="#5CC98A"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-inner">
+            <div class="ring-pct" id="ring-pct-text">0%</div>
+            <div class="ring-sub">to quitting</div>
+          </div>
+        </div>
+        <div class="ring-caption">Based on your last 7 days</div>
+      </div>
+
+      <!-- Stats grid -->
+      <p class="section-title">Your Stats</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="section-title" style="margin-bottom:8px">Yesterday</p>
+          <div class="stat-num" id="stat-urges-yesterday">0</div>
+          <div class="stat-label">urges overcome</div>
+        </div>
+        <div class="stat-card">
+          <p class="section-title" style="margin-bottom:8px">Last 7 days</p>
+          <div class="stat-num" id="stat-urges-week">0</div>
+          <div class="stat-label">urges overcome</div>
+        </div>
+        <div class="stat-card">
+          <p class="section-title" style="margin-bottom:8px">Yesterday</p>
+          <div class="stat-num" id="stat-sticks-yesterday">0</div>
+          <div class="stat-label">sticks smoked</div>
+        </div>
+        <div class="stat-card">
+          <p class="section-title" style="margin-bottom:8px">Last 7 days</p>
+          <div class="stat-num" id="stat-sticks-week">0</div>
+          <div class="stat-label">sticks smoked</div>
+        </div>
+      </div>
+
+      <button class="log-today-btn" onclick="openLog()">📋 Log Today's Progress</button>
+
+      <p class="dash-quote" id="dash-quote">"The first step is always the hardest."</p>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- ══════════════════════════════════════
+     7. LOG OVERLAY (outside #app, position:fixed)
+══════════════════════════════════════ -->
+<div id="screen-log" class="log-overlay" style="display:none">
+  <div class="log-backdrop" onclick="closeLog()"></div>
+  <div class="log-sheet">
+    <h2 style="font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; margin-bottom:4px">Log Today</h2>
+    <p style="color:var(--dim); font-size:13px; margin-bottom:28px" id="log-date-label"></p>
+
+    <label class="field-label" for="log-sticks-input">Cigarettes smoked today</label>
+    <input class="bc-input" type="number" id="log-sticks-input" min="0" placeholder="0" style="margin-bottom:28px; font-size:36px">
+
+    <label class="field-label" for="log-urges-input">Urges overcome today</label>
+    <input class="bc-input" type="number" id="log-urges-input" min="0" placeholder="0" style="margin-bottom:36px; font-size:36px">
+
+    <button class="btn-primary" onclick="saveLog()" style="margin-bottom:12px">Save</button>
+    <div style="text-align:center">
+      <button class="btn-ghost" onclick="closeLog()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  UTILITIES
+// ════════════════════════════════════════════════════════════
+
+function getToday() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function getDateOffset(days) {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0];
+}
+
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem('bc_profile') || 'null'); } catch(e) { return null; }
+}
+
+function saveProfile(obj) {
+  localStorage.setItem('bc_profile', JSON.stringify(obj));
+}
+
+function getLogs() {
+  try { return JSON.parse(localStorage.getItem('bc_logs') || '[]'); } catch(e) { return []; }
+}
+
+function saveLogs(logs) {
+  localStorage.setItem('bc_logs', JSON.stringify(logs));
+}
+
+function getSessionName() {
+  return sessionStorage.getItem('bc_session') || '';
+}
+
+function padNum(n) {
+  return String(n).padStart(2, '0');
+}
+
+function formatDateLabel(isoDate) {
+  const d = new Date(isoDate + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// ════════════════════════════════════════════════════════════
+//  SCREEN MANAGEMENT
+// ════════════════════════════════════════════════════════════
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+  });
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  WELCOME SCREEN
+// ════════════════════════════════════════════════════════════
+
+function initWelcome() {
+  const profile = getProfile();
+  const defaultDiv = document.getElementById('welcome-default');
+  const backDiv = document.getElementById('welcome-back');
+
+  if (profile && profile.onboarded) {
+    // Show welcome back variant
+    defaultDiv.style.display = 'none';
+    backDiv.style.display = 'flex';
+    const displayName = profile.name || 'Friend';
+    document.getElementById('wb-name').textContent = displayName;
+  } else {
+    defaultDiv.style.display = 'block';
+    backDiv.style.display = 'none';
+  }
+}
+
+function handleWelcomeBackDashboard() {
+  const profile = getProfile();
+  if (!getSessionName() && profile) {
+    sessionStorage.setItem('bc_session', profile.name || '');
+  }
+  renderDashboard();
+  showScreen('screen-dashboard');
+}
+
+function showLoginAsOther() {
+  sessionStorage.removeItem('bc_session');
+  document.getElementById('login-name-input').value = '';
+  showScreen('screen-login');
+}
+
+// ════════════════════════════════════════════════════════════
+//  LOGIN
+// ════════════════════════════════════════════════════════════
+
+function startLogin() {
+  document.getElementById('login-name-input').value = '';
+  showScreen('screen-login');
+}
+
+function startOnboarding() {
+  showScreen('screen-onboard-intro');
+  initIntro();
+}
+
+function handleLoginContinue() {
+  const nameInput = document.getElementById('login-name-input');
+  const name = nameInput.value.trim();
+  if (!name) {
+    nameInput.style.borderBottomColor = 'var(--red)';
+    setTimeout(() => { nameInput.style.borderBottomColor = ''; }, 1200);
+    return;
+  }
+  sessionStorage.setItem('bc_session', name);
+
+  const profile = getProfile();
+  if (profile && profile.onboarded) {
+    renderDashboard();
+    showScreen('screen-dashboard');
+  } else {
+    // No completed profile — go to onboarding intro
+    initIntro();
+    showScreen('screen-onboard-intro');
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  ONBOARDING INTRO CAROUSEL
+// ════════════════════════════════════════════════════════════
+
+const INTRO_STEPS = [
+  "Well done for taking the leap of faith on this journey. These cards will help you along the way.",
+  "Carry these cards wherever you go.",
+  "Use the Emotion card whenever you feel a negative urge and follow its instructions.",
+  "When visiting a bar, club, or friends who smoke — use The Social Setting card.",
+  "Remember to log your progress in the Daily Card at the end of your day.",
+  "Come back to this card to track your progress.",
+  "This journey will not be easy — but it will be worth it. Let's go."
+];
+
+let introStep = 0;
+
+function initIntro() {
+  introStep = 0;
+  renderIntroStep();
+}
+
+function renderIntroStep() {
+  const total = INTRO_STEPS.length;
+  const numEl = document.getElementById('intro-num');
+  const textEl = document.getElementById('intro-text');
+  const nextBtn = document.getElementById('intro-next-btn');
+  const dotsEl = document.getElementById('intro-dots');
+
+  numEl.textContent = padNum(introStep + 1) + ' / ' + padNum(total);
+  textEl.textContent = INTRO_STEPS[introStep];
+  nextBtn.textContent = introStep === total - 1 ? "Let's go →" : "Next →";
+
+  // Dots
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === introStep ? ' active' : '');
+    dotsEl.appendChild(dot);
+  }
+}
+
+function nextIntroStep() {
+  if (introStep < INTRO_STEPS.length - 1) {
+    introStep++;
+    renderIntroStep();
+  } else {
+    // Last step — go to questions
+    initQuestions();
+    showScreen('screen-onboard-questions');
+  }
+}
+
+function prevIntroStep() {
+  if (introStep > 0) {
+    introStep--;
+    renderIntroStep();
+  } else {
+    showScreen('screen-welcome');
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  ONBOARDING QUESTIONS
+// ════════════════════════════════════════════════════════════
+
+let qStep = 0;
+const answers = {};
+
+const QUESTIONS = [
+  { id: 'name',    title: "What's your name?",                        type: 'text',   placeholder: 'Your name' },
+  { id: 'age',     title: "How old are you?",                         type: 'number', placeholder: 'Your age', min: 1, max: 120 },
+  { id: 'reason1', title: "Why do you want to quit? — Reason 1",      type: 'text',   placeholder: 'e.g. My health' },
+  { id: 'reason2', title: "Why do you want to quit? — Reason 2",      type: 'text',   placeholder: 'e.g. My family' },
+  { id: 'reason3', title: "Why do you want to quit? — Reason 3",      type: 'text',   placeholder: 'e.g. To save money' },
+  { id: 'sticks',  title: "How many cigarettes do you smoke a day?",  type: 'number', placeholder: '0', min: 1 },
+  { id: 'quit',    title: "When do you want to completely stop?",      type: 'date' }
+];
+
+function initQuestions() {
+  qStep = 0;
+
+  // Populate month select
+  const monthSel = document.getElementById('q-month-select');
+  monthSel.innerHTML = '';
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  months.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = padNum(i + 1);
+    opt.textContent = m;
+    monthSel.appendChild(opt);
+  });
+  // Set current month
+  const curMonth = new Date().getMonth();
+  monthSel.value = padNum(curMonth + 1);
+
+  // Populate year select
+  const yearSel = document.getElementById('q-year-select');
+  yearSel.innerHTML = '';
+  const curYear = new Date().getFullYear();
+  for (let y = curYear; y <= curYear + 5; y++) {
+    const opt = document.createElement('option');
+    opt.value = String(y);
+    opt.textContent = String(y);
+    yearSel.appendChild(opt);
+  }
+  yearSel.value = String(curYear);
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[qStep];
+  const total = QUESTIONS.length;
+
+  document.getElementById('q-step-label').textContent = 'Question ' + (qStep + 1) + ' of ' + total;
+  document.getElementById('q-title').textContent = q.title;
+  document.getElementById('q-progress-fill').style.width = (((qStep + 1) / total) * 100) + '%';
+  document.getElementById('q-next-btn').textContent = qStep === total - 1 ? 'Finish →' : 'Next →';
+
+  // Show / hide input types
+  const textWrap = document.getElementById('q-input-text-wrap');
+  const numWrap = document.getElementById('q-input-number-wrap');
+  const dateWrap = document.getElementById('q-input-date-wrap');
+
+  textWrap.style.display = 'none';
+  numWrap.style.display = 'none';
+  dateWrap.style.display = 'none';
+
+  if (q.type === 'text') {
+    textWrap.style.display = 'block';
+    const input = document.getElementById('q-input-text');
+    input.placeholder = q.placeholder || '';
+    // Pre-fill from answers or session
+    if (q.id === 'name') {
+      input.value = answers['name'] || getSessionName() || '';
+    } else {
+      input.value = answers[q.id] || '';
+    }
+    setTimeout(() => input.focus(), 100);
+  } else if (q.type === 'number') {
+    numWrap.style.display = 'block';
+    const input = document.getElementById('q-input-number');
+    input.placeholder = q.placeholder || '0';
+    input.min = q.min || 1;
+    if (q.max) input.max = q.max;
+    input.value = answers[q.id] || '';
+    setTimeout(() => input.focus(), 100);
+  } else if (q.type === 'date') {
+    dateWrap.style.display = 'block';
+    // Restore saved value
+    if (answers['quit']) {
+      const parts = answers['quit'].split('-');
+      if (parts.length === 2) {
+        document.getElementById('q-month-select').value = parts[1];
+        document.getElementById('q-year-select').value = parts[0];
+      }
+    }
+  }
+}
+
+function nextQuestion() {
+  const q = QUESTIONS[qStep];
+
+  // Validate & collect
+  if (q.type === 'text') {
+    const val = document.getElementById('q-input-text').value.trim();
+    if (!val) {
+      flashInput('q-input-text');
+      return;
+    }
+    answers[q.id] = val;
+    if (q.id === 'name') {
+      sessionStorage.setItem('bc_session', val);
+    }
+  } else if (q.type === 'number') {
+    const val = document.getElementById('q-input-number').value.trim();
+    const num = parseInt(val, 10);
+    if (!val || isNaN(num) || num < (q.min || 1)) {
+      flashInput('q-input-number');
+      return;
+    }
+    answers[q.id] = num;
+  } else if (q.type === 'date') {
+    const month = document.getElementById('q-month-select').value;
+    const year = document.getElementById('q-year-select').value;
+    answers['quit'] = year + '-' + month;
+  }
+
+  if (qStep < QUESTIONS.length - 1) {
+    qStep++;
+    renderQuestion();
+  } else {
+    // Save and finish
+    saveProfileFromAnswers();
+    showScreen('screen-onboard-telegram');
+  }
+}
+
+function prevQuestion() {
+  if (qStep > 0) {
+    qStep--;
+    renderQuestion();
+  } else {
+    // Back to intro last step
+    showScreen('screen-onboard-intro');
+  }
+}
+
+function flashInput(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.borderBottomColor = 'var(--red)';
+  setTimeout(() => { el.style.borderBottomColor = ''; }, 1200);
+}
+
+function saveProfileFromAnswers() {
+  const profile = {
+    name: answers['name'] || getSessionName() || '',
+    age: answers['age'] || '',
+    reasons: [answers['reason1'] || '', answers['reason2'] || '', answers['reason3'] || ''],
+    sticksPerDay: answers['sticks'] || 0,
+    quitDate: answers['quit'] || '',
+    startDate: getToday(),
+    onboarded: true
+  };
+  saveProfile(profile);
+  sessionStorage.setItem('bc_session', profile.name);
+}
+
+// ════════════════════════════════════════════════════════════
+//  TELEGRAM SCREEN
+// ════════════════════════════════════════════════════════════
+
+function goToDashboard() {
+  renderDashboard();
+  showScreen('screen-dashboard');
+}
+
+// ════════════════════════════════════════════════════════════
+//  LOG OVERLAY
+// ════════════════════════════════════════════════════════════
+
+function openLog() {
+  const today = getToday();
+  document.getElementById('log-date-label').textContent = formatDateLabel(today);
+
+  const logs = getLogs();
+  const todayLog = logs.find(l => l.date === today);
+  document.getElementById('log-sticks-input').value = todayLog ? todayLog.sticks : '';
+  document.getElementById('log-urges-input').value  = todayLog ? todayLog.urges  : '';
+
+  document.getElementById('screen-log').style.display = 'block';
+}
+
+function closeLog() {
+  document.getElementById('screen-log').style.display = 'none';
+}
+
+function saveLog() {
+  const sticks = parseInt(document.getElementById('log-sticks-input').value, 10) || 0;
+  const urges  = parseInt(document.getElementById('log-urges-input').value,  10) || 0;
+  const today = getToday();
+
+  let logs = getLogs();
+  const idx = logs.findIndex(l => l.date === today);
+  if (idx >= 0) {
+    logs[idx].sticks = sticks;
+    logs[idx].urges  = urges;
+  } else {
+    logs.push({ date: today, sticks, urges });
+  }
+  saveLogs(logs);
+  closeLog();
+  renderDashboard();
+}
+
+// ════════════════════════════════════════════════════════════
+//  DASHBOARD
+// ════════════════════════════════════════════════════════════
+
+function renderDashboard() {
+  const profile = getProfile() || {};
+  const logs    = getLogs();
+  const name    = getSessionName() || profile.name || 'Friend';
+
+  // Days since start
+  const start = new Date((profile.startDate || getToday()) + 'T00:00:00');
+  const days  = Math.max(0, Math.floor((new Date() - start) / 86400000));
+
+  // Yesterday stats
+  const yesterday    = getDateOffset(-1);
+  const yLog         = logs.find(l => l.date === yesterday) || {};
+  const urgesYesterday = yLog.urges  || 0;
+  const sticksYesterday = yLog.sticks || 0;
+
+  // Last 7 days
+  const last7      = Array.from({ length: 7 }, (_, i) => getDateOffset(-i - 1));
+  const urgesWeek  = last7.reduce((s, d) => s + (logs.find(l => l.date === d)?.urges  || 0), 0);
+  const sticksWeek = last7.reduce((s, d) => s + (logs.find(l => l.date === d)?.sticks || 0), 0);
+
+  // Progress %
+  const initialSticks = profile.sticksPerDay || 1;
+  const avgSticks     = sticksWeek / 7;
+  const progress      = Math.min(100, Math.max(0, Math.round(((initialSticks - avgSticks) / initialSticks) * 100)));
+
+  // Greeting
+  const hour     = new Date().getHours();
+  const greeting = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+
+  // Motivational quote
+  let quote;
+  if (days <= 3)      quote = '"The first step is always the hardest."';
+  else if (days <= 7) quote = '"One week down. The hardest part is behind you."';
+  else                quote = '"Every day is proof of what you\'re capable of."';
+
+  // Update DOM
+  document.getElementById('dash-greeting-label').textContent = 'Good ' + greeting + ',';
+  document.getElementById('dash-greeting-name').textContent  = name;
+  document.getElementById('dash-days-label').textContent     = days + ' day' + (days === 1 ? '' : 's') + ' on this journey';
+
+  document.getElementById('stat-urges-yesterday').textContent  = urgesYesterday;
+  document.getElementById('stat-urges-week').textContent       = urgesWeek;
+  document.getElementById('stat-sticks-yesterday').textContent = sticksYesterday;
+  document.getElementById('stat-sticks-week').textContent      = sticksWeek;
+
+  document.getElementById('ring-pct-text').textContent = progress + '%';
+  document.getElementById('dash-quote').textContent    = quote;
+
+  // Progress ring: circumference ≈ 440
+  const circumference = 2 * Math.PI * 70; // ≈ 439.82
+  const offset = circumference * (1 - progress / 100);
+  const arc = document.getElementById('ring-progress-arc');
+  if (arc) {
+    arc.setAttribute('stroke-dasharray', circumference.toFixed(2));
+    arc.setAttribute('stroke-dashoffset', offset.toFixed(2));
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  INIT ON LOAD
+// ════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', function() {
+  initWelcome();
+  showScreen('screen-welcome');
+  initIntro();
+  initQuestions();
+});
+</script>
+</body>
+</html>

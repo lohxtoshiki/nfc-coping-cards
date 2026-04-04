@@ -724,8 +724,23 @@
     }
 
     // ─── SUCCESS ─────────────────────────────────────────────
+    function logUrgeToStorage() {
+        try {
+            const today = new Date().toISOString().split('T')[0];
+            const logs = JSON.parse(localStorage.getItem('bc_logs') || '[]');
+            const existing = logs.find(l => l.date === today);
+            if (existing) {
+                existing.urges = (existing.urges || 0) + 1;
+            } else {
+                logs.push({ date: today, sticks: 0, urges: 1 });
+            }
+            localStorage.setItem('bc_logs', JSON.stringify(logs));
+        } catch(e) {}
+    }
+
     function showSuccess() {
         if (running) { clearInterval(ticker); running = false; }
+        logUrgeToStorage();
         document.getElementById('successOverlay').classList.add('show');
         if (navigator.vibrate) navigator.vibrate([60, 40, 120]);
     }
