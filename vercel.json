@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/stressed", "destination": "/stressed.html" },
+    { "source": "/", "destination": "/index.html" }
+  ]
+}
