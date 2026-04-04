@@ -7,6 +7,7 @@
     { "source": "/lonely",    "destination": "/lonely.html" },
     { "source": "/sad",       "destination": "/sad.html" },
     { "source": "/home",      "destination": "/home.html" },
+    { "source": "/daily",     "destination": "/daily.html" },
     { "source": "/",          "destination": "/index.html" }
   ]
 }

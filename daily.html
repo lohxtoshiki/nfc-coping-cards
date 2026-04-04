@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Card · BreakCards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #062014;
+      --accent:      #2EC98A;
+      --accent-mid:  #1A7A50;
+      --accent-dim:  rgba(46,201,138,0.12);
+      --text:        #E8F5EE;
+      --dim:         rgba(232,245,238,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Screen system ─────────────────────────────── */
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Welcome ───────────────────────────────────── */
+    #screen-welcome { justify-content: space-between; }
+
+    .hero-wrap { width: 100%; flex-shrink: 0; }
+
+    .welcome-body {
+      padding: 24px 32px 52px;
+      width: 100%;
+      text-align: center;
+    }
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .tagline {
+      font-size: 13px;
+      color: var(--dim);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .greeting {
+      font-size: 16px;
+      color: var(--dim);
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    /* ── Step screens ──────────────────────────────── */
+    .step-screen {
+      justify-content: center;
+      padding: 56px 28px 52px;
+    }
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(46,201,138,0.2);
+      transition: background 0.3s;
+    }
+    .dot.active { background: var(--accent); }
+    .dot.done   { background: rgba(46,201,138,0.55); }
+
+    .step-label {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .step-q {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 600;
+      line-height: 1.15;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* ── Mood grid ─────────────────────────────────── */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 340px;
+      margin-bottom: 36px;
+    }
+    .mood-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 6px;
+      background: var(--accent-dim);
+      border: 1.5px solid transparent;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 11px;
+      color: var(--dim);
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .mood-chip .em { font-size: 24px; line-height: 1; }
+    .mood-chip.selected {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(46,201,138,0.18);
+    }
+
+    /* ── Number stepper ────────────────────────────── */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 10px;
+    }
+    .stepper-btn {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      font-size: 30px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s;
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1;
+      user-select: none;
+    }
+    .stepper-btn:active { background: var(--accent-dim); }
+    .stepper-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 88px;
+      font-weight: 700;
+      min-width: 110px;
+      text-align: center;
+      line-height: 1;
+    }
+    .stepper-hint {
+      font-size: 13px;
+      color: var(--dim);
+      text-align: center;
+      min-height: 20px;
+      transition: color 0.3s;
+      margin-bottom: 44px;
+    }
+    .stepper-hint.positive { color: var(--accent); }
+
+    /* ── Done screen ───────────────────────────────── */
+    #screen-done {
+      justify-content: center;
+      padding: 52px 32px;
+      text-align: center;
+      gap: 20px;
+    }
+    .done-check {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      background: var(--accent-dim);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto;
+    }
+    .done-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .done-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--accent);
+      line-height: 1.55;
+      max-width: 290px;
+      margin: 0 auto;
+    }
+    .done-sub {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.65;
+      max-width: 260px;
+      margin: 0 auto;
+    }
+
+    /* ── Buttons ───────────────────────────────────── */
+    .btn-primary {
+      width: 100%; max-width: 340px;
+      padding: 17px 24px;
+      background: var(--accent);
+      color: #062014;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:disabled { opacity: 0.3; cursor: default; }
+    .btn-ghost {
+      width: 100%; max-width: 340px;
+      padding: 14px 24px;
+      background: transparent;
+      border: 1.5px solid rgba(46,201,138,0.35);
+      color: var(--dim);
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Breathe animation ─────────────────────────── */
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.05); }
+    }
+    .breathe { animation: breathe 4.5s ease-in-out infinite; transform-origin: 180px 230px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════ WELCOME ══════════════════════════ -->
+<div id="screen-welcome" class="screen">
+  <div class="hero-wrap">
+    <svg viewBox="0 0 360 290" fill="none" xmlns="http://www.w3.org/2000/svg"
+         width="100%" style="display:block">
+      <rect width="360" height="290" fill="#062014"/>
+
+      <!-- Dividing line -->
+      <line x1="0" y1="230" x2="360" y2="230" stroke="rgba(46,201,138,0.14)" stroke-width="1"/>
+
+      <!-- Vertical spine from top to chevron -->
+      <line x1="180" y1="0" x2="180" y2="160" stroke="rgba(46,201,138,0.22)" stroke-width="1"/>
+
+      <!-- Radial lines spreading from center upward -->
+      <line x1="180" y1="230" x2="285" y2="0"   stroke="rgba(46,201,138,0.16)" stroke-width="1"/>
+      <line x1="180" y1="230" x2="75"  y2="0"   stroke="rgba(46,201,138,0.16)" stroke-width="1"/>
+      <line x1="180" y1="230" x2="360" y2="68"  stroke="rgba(46,201,138,0.11)" stroke-width="1"/>
+      <line x1="180" y1="230" x2="0"   y2="68"  stroke="rgba(46,201,138,0.11)" stroke-width="1"/>
+      <line x1="180" y1="230" x2="360" y2="155" stroke="rgba(46,201,138,0.08)" stroke-width="1"/>
+      <line x1="180" y1="230" x2="0"   y2="155" stroke="rgba(46,201,138,0.08)" stroke-width="1"/>
+
+      <!-- Chevron pointing down toward circle -->
+      <polyline points="152,108 180,142 208,108"
+                stroke="rgba(46,201,138,0.72)" stroke-width="2.2"
+                fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Concentric circles with breathe -->
+      <g class="breathe">
+        <circle cx="180" cy="230" r="74" fill="rgba(10,38,22,0.95)"/>
+        <circle cx="180" cy="230" r="53" fill="rgba(18,72,42,0.9)"/>
+        <circle cx="180" cy="230" r="32" fill="#2EC98A" opacity="0.88"/>
+        <circle cx="180" cy="230" r="14" fill="#84EDBE"/>
+      </g>
+
+      <!-- Outer ring stroke -->
+      <circle cx="180" cy="230" r="74" fill="none" stroke="rgba(46,201,138,0.12)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="welcome-body">
+    <p class="eyebrow">your</p>
+    <h1 class="welcome-title">daily card</h1>
+    <p class="tagline">check in · reflect · begin</p>
+    <p class="greeting" id="welcome-greeting">How was your day?</p>
+    <button class="btn-primary" onclick="beginCheckin()">Begin →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════ MOOD ══════════════════════════ -->
+<div id="screen-mood" class="screen step-screen">
+  <div class="progress-dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  <p class="step-label">Step 1 of 3</p>
+  <h2 class="step-q">How did you<br>feel today?</h2>
+
+  <div class="mood-grid">
+    <div class="mood-chip" onclick="selectMood(this,'Stressed')"><span class="em">😤</span>Stressed</div>
+    <div class="mood-chip" onclick="selectMood(this,'Anxious')"> <span class="em">😰</span>Anxious</div>
+    <div class="mood-chip" onclick="selectMood(this,'Angry')">   <span class="em">😠</span>Angry</div>
+    <div class="mood-chip" onclick="selectMood(this,'Lonely')">  <span class="em">🌑</span>Lonely</div>
+    <div class="mood-chip" onclick="selectMood(this,'Sad')">     <span class="em">😔</span>Sad</div>
+    <div class="mood-chip" onclick="selectMood(this,'Meh')">     <span class="em">😐</span>Meh</div>
+    <div class="mood-chip" onclick="selectMood(this,'Okay')">    <span class="em">🙂</span>Okay</div>
+    <div class="mood-chip" onclick="selectMood(this,'Good')">    <span class="em">😊</span>Good</div>
+  </div>
+
+  <button class="btn-primary" id="btn-mood-next" onclick="goToSticks()" disabled>Next →</button>
+</div>
+
+<!-- ══════════════════════════ STICKS ══════════════════════════ -->
+<div id="screen-sticks" class="screen step-screen">
+  <div class="progress-dots">
+    <div class="dot done"></div>
+    <div class="dot active"></div>
+    <div class="dot"></div>
+  </div>
+  <p class="step-label">Step 2 of 3</p>
+  <h2 class="step-q">Cigarettes<br>smoked today?</h2>
+
+  <div class="stepper">
+    <button class="stepper-btn" onclick="changeVal('sticks',-1)">−</button>
+    <div class="stepper-val" id="sticks-val">0</div>
+    <button class="stepper-btn" onclick="changeVal('sticks',1)">+</button>
+  </div>
+  <p class="stepper-hint" id="sticks-hint"></p>
+
+  <button class="btn-primary" onclick="goToTomorrow()">Next →</button>
+</div>
+
+<!-- ══════════════════════════ TOMORROW ══════════════════════════ -->
+<div id="screen-tomorrow" class="screen step-screen">
+  <div class="progress-dots">
+    <div class="dot done"></div>
+    <div class="dot done"></div>
+    <div class="dot active"></div>
+  </div>
+  <p class="step-label">Step 3 of 3</p>
+  <h2 class="step-q">How many<br>tomorrow?</h2>
+
+  <div class="stepper">
+    <button class="stepper-btn" onclick="changeVal('tomorrow',-1)">−</button>
+    <div class="stepper-val" id="tomorrow-val">0</div>
+    <button class="stepper-btn" onclick="changeVal('tomorrow',1)">+</button>
+  </div>
+  <p class="stepper-hint" id="tomorrow-hint"></p>
+
+  <button class="btn-primary" onclick="saveAndFinish()">Save →</button>
+</div>
+
+<!-- ══════════════════════════ DONE ══════════════════════════ -->
+<div id="screen-done" class="screen">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; padding:52px 32px; text-align:center; width:100%">
+    <div class="done-check">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <path d="M5 15l7 7 13-13" stroke="#2EC98A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div>
+      <p class="done-title">Logged.</p>
+      <p class="done-title" style="color:var(--accent)">Good night.</p>
+    </div>
+
+    <p class="done-quote" id="done-quote"></p>
+    <p class="done-sub"   id="done-sub"></p>
+
+    <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:8px">
+      <button class="btn-primary" style="max-width:280px" onclick="goHome()">See your progress →</button>
+      <button class="btn-ghost"   style="max-width:280px" onclick="restart()">Check in again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ SCRIPT ══════════════════════════ -->
+<script>
+// ────────────────────────────────────────────────────────────
+//  Storage helpers
+// ────────────────────────────────────────────────────────────
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem('bc_profile') || 'null'); } catch(e) { return null; }
+}
+function getLogs() {
+  try { return JSON.parse(localStorage.getItem('bc_logs') || '[]'); } catch(e) { return []; }
+}
+function saveLogs(logs) {
+  localStorage.setItem('bc_logs', JSON.stringify(logs));
+}
+function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// ────────────────────────────────────────────────────────────
+//  State
+// ────────────────────────────────────────────────────────────
+let selectedMood = null;
+let sticksVal    = 0;
+let tomorrowVal  = 0;
+
+const QUOTES = [
+  "Every cigarette you didn't smoke is a victory.",
+  "Your lungs are healing with every clean breath.",
+  "The hardest step is the one you've already taken.",
+  "Each smoke-free day is a day you gave back to yourself.",
+  "You are stronger than any craving.",
+  "Progress, not perfection — you're doing this.",
+  "Your future self is grateful for every choice you make tonight.",
+  "One less cigarette today. One more reason to be proud.",
+  "Small wins compound. You're building something real.",
+  "You didn't come this far to only come this far.",
+  "Rest well. Tomorrow is another chance to be free.",
+  "Every night you check in is proof you haven't given up."
+];
+
+// ────────────────────────────────────────────────────────────
+//  Navigation
+// ────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function beginCheckin() {
+  // Pre-fill from any existing log entry for today
+  const logs    = getLogs();
+  const todayLog = logs.find(l => l.date === getToday());
+  if (todayLog) {
+    sticksVal   = todayLog.sticks        || 0;
+    tomorrowVal = todayLog.tomorrowTarget || 0;
+  }
+
+  // Seed tomorrow target from profile baseline if not set
+  const profile = getProfile();
+  if (profile && tomorrowVal === 0 && profile.sticksPerDay) {
+    tomorrowVal = Math.max(0, profile.sticksPerDay - 1);
+  }
+
+  document.getElementById('sticks-val').textContent   = sticksVal;
+  document.getElementById('tomorrow-val').textContent = tomorrowVal;
+  updateHint('sticks');
+  updateHint('tomorrow');
+  showScreen('screen-mood');
+}
+
+function selectMood(el, mood) {
+  document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = mood;
+  document.getElementById('btn-mood-next').disabled = false;
+}
+
+function goToSticks() {
+  updateHint('sticks');
+  showScreen('screen-sticks');
+}
+
+function goToTomorrow() {
+  updateHint('tomorrow');
+  showScreen('screen-tomorrow');
+}
+
+function changeVal(type, delta) {
+  if (type === 'sticks') {
+    sticksVal = Math.max(0, sticksVal + delta);
+    document.getElementById('sticks-val').textContent = sticksVal;
+    updateHint('sticks');
+  } else {
+    tomorrowVal = Math.max(0, tomorrowVal + delta);
+    document.getElementById('tomorrow-val').textContent = tomorrowVal;
+    updateHint('tomorrow');
+  }
+}
+
+function updateHint(type) {
+  const profile  = getProfile();
+  const baseline = profile?.sticksPerDay || null;
+
+  if (type === 'sticks') {
+    const el   = document.getElementById('sticks-hint');
+    const diff = baseline !== null ? sticksVal - baseline : null;
+    if (diff === null)      { el.textContent = ''; el.className = 'stepper-hint'; return; }
+    if (diff < 0)           { el.textContent = `${Math.abs(diff)} fewer than usual — well done`; el.className = 'stepper-hint positive'; }
+    else if (diff === 0)    { el.textContent = 'Same as your baseline'; el.className = 'stepper-hint'; }
+    else                    { el.textContent = `${diff} more than usual`; el.className = 'stepper-hint'; }
+  } else {
+    const el   = document.getElementById('tomorrow-hint');
+    const diff = tomorrowVal - sticksVal;
+    if (tomorrowVal === 0)  { el.textContent = 'Aiming for zero — incredible.'; el.className = 'stepper-hint positive'; }
+    else if (diff < 0)      { el.textContent = `${Math.abs(diff)} fewer than today — great goal`; el.className = 'stepper-hint positive'; }
+    else if (diff === 0)    { el.textContent = sticksVal === 0 ? 'Another smoke-free day.' : 'Same as today'; el.className = 'stepper-hint' + (sticksVal === 0 ? ' positive' : ''); }
+    else                    { el.textContent = 'Try to aim a little lower tomorrow'; el.className = 'stepper-hint'; }
+  }
+}
+
+function saveAndFinish() {
+  const today = getToday();
+  const logs  = getLogs();
+  const idx   = logs.findIndex(l => l.date === today);
+  const entry = {
+    date:          today,
+    sticks:        sticksVal,
+    urges:         idx >= 0 ? (logs[idx].urges || 0) : 0,  // preserve urge count from emotion cards
+    mood:          selectedMood,
+    tomorrowTarget: tomorrowVal
+  };
+
+  if (idx >= 0) logs[idx] = { ...logs[idx], ...entry };
+  else           logs.push(entry);
+  saveLogs(logs);
+
+  // Quote
+  document.getElementById('done-quote').textContent =
+    `"${QUOTES[Math.floor(Math.random() * QUOTES.length)]}"`;
+
+  // Sub message
+  const profile = getProfile();
+  const name    = profile?.name ? `, ${profile.name}` : '';
+  let sub = '';
+  if (tomorrowVal === 0) {
+    sub = `Aiming for zero tomorrow${name}. Believe in yourself.`;
+  } else if (tomorrowVal < sticksVal) {
+    sub = `Tomorrow's target: ${tomorrowVal} stick${tomorrowVal !== 1 ? 's' : ''}. Keep stepping down${name}.`;
+  } else {
+    sub = `Every check-in counts${name}. See you tomorrow.`;
+  }
+  document.getElementById('done-sub').textContent = sub;
+
+  showScreen('screen-done');
+}
+
+function goHome() { window.location.href = '/home'; }
+function restart() { window.location.reload(); }
+
+// ────────────────────────────────────────────────────────────
+//  Init
+// ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  const profile = getProfile();
+  const name    = profile?.name || '';
+  const hour    = new Date().getHours();
+  const tod     = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+
+  document.getElementById('welcome-greeting').textContent = name
+    ? `Good ${tod}, ${name}. How was your day?`
+    : 'How was your day?';
+
+  showScreen('screen-welcome');
+});
+</script>
+</body>
+</html>
