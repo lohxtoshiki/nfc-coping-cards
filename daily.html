@@ -260,6 +260,36 @@
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
     }
+    .btn-share {
+      width: 100%; max-width: 280px;
+      padding: 14px 24px;
+      background: transparent;
+      border: 1.5px solid rgba(46,201,138,0.4);
+      color: var(--text);
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-share:disabled { opacity: 0.5; cursor: default; }
+    .toast {
+      position: fixed;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(6,32,20,0.97);
+      border: 1px solid rgba(46,201,138,0.4);
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-size: 14px; color: var(--text);
+      white-space: nowrap;
+      transition: transform 0.35s ease;
+      z-index: 100; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
 
     /* ── Breathe animation ─────────────────────────── */
     @keyframes breathe {
@@ -402,10 +432,19 @@
 
     <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:8px">
       <button class="btn-primary" style="max-width:280px" onclick="goHome()">See your progress →</button>
-      <button class="btn-ghost"   style="max-width:280px" onclick="restart()">Check in again</button>
+      <button class="btn-share" id="btn-share" onclick="shareToTelegram()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Tell your group
+      </button>
+      <button class="btn-ghost" style="max-width:280px" onclick="restart()">Check in again</button>
     </div>
   </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <!-- ══════════════════════════ SCRIPT ══════════════════════════ -->
 <script>
@@ -565,6 +604,89 @@ function saveAndFinish() {
 
 function goHome() { window.location.href = '/home'; }
 function restart() { window.location.reload(); }
+
+// ────────────────────────────────────────────────────────────
+//  Telegram share
+// ────────────────────────────────────────────────────────────
+const TG_TOKEN   = '8696784388:AAGgrzcQH7kMCW2c8gBtusfMC6gwJbues4o';
+const TG_CHAT_ID = '@smokingcessationjason';
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function buildDailyMessage(profile) {
+  const name = esc(profile?.name || 'Someone');
+  const moodEmoji = {
+    Stressed:'😤', Anxious:'😰', Angry:'😠', Lonely:'🌑',
+    Sad:'😔', Meh:'😐', Okay:'🙂', Good:'😊'
+  }[selectedMood] || '🙂';
+
+  const lines = [
+    `📅 <b>${name}'s daily check-in</b>`,
+    ``,
+    `Feeling: ${moodEmoji} ${esc(selectedMood || '—')}`,
+    `Cigarettes today: <b>${sticksVal}</b>`,
+    `Target tomorrow: <b>${tomorrowVal}</b>`,
+    ``
+  ];
+
+  if (sticksVal === 0)            lines.push(`Smoke-free day. 🌟`);
+  else if (tomorrowVal < sticksVal) lines.push(`Stepping down day by day. 💪`);
+  else                             lines.push(`Showing up every day. That matters. 💪`);
+
+  return lines.join('\n');
+}
+
+async function shareToTelegram() {
+  const btn     = document.getElementById('btn-share');
+  const profile = getProfile();
+  const message = buildDailyMessage(profile);
+
+  btn.disabled  = true;
+  btn.innerHTML = 'Sending…';
+
+  try {
+    const resp = await fetch(
+      `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
+      {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: 'HTML' })
+      }
+    );
+    const data = await resp.json();
+    if (data.ok) {
+      btn.innerHTML = '✓ &nbsp;Sent to group';
+      btn.style.borderColor = 'var(--accent)';
+      btn.style.color       = 'var(--accent)';
+      showToast('Posted to your group ✓');
+    } else {
+      btn.disabled  = false;
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Tell your group`;
+      showToast('Could not send — try again');
+    }
+  } catch(e) {
+    btn.disabled  = false;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Tell your group`;
+    showToast('No connection — try again');
+  }
+}
+
+// ────────────────────────────────────────────────────────────
+//  Toast
+// ────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
 
 // ────────────────────────────────────────────────────────────
 //  Init
